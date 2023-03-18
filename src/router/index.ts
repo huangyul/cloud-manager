@@ -1,5 +1,6 @@
 import { App } from 'vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { routes } from './routes'
 
 // 白名单路由
 const WHILE_NAME_LIST: string[] = []
@@ -7,7 +8,7 @@ const WHILE_NAME_LIST: string[] = []
 
 export const router = createRouter({
   history: createWebHashHistory(),
-  routes: [],
+  routes: routes as unknown as RouteRecordRaw[],
 })
 
 export function resetRouter() {
