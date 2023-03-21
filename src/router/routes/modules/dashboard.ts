@@ -1,18 +1,17 @@
-import { AppRouteRecordRaw } from '../../types'
-import Layout from '/@/layout/index.vue'
+import { AppRouteRecordRaw } from "../../types";
+import Layout from "/@/layout/index.vue";
 
 const dashboard: AppRouteRecordRaw = {
-  path: '/',
-  name: 'home',
+  path: "/22",
+  name: "home",
   component: Layout,
   children: [
     {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: () => import('/@/views/dashboard/index.vue'),
+      path: "/dashboard",
+      name: "Dashboard",
+      component: () => import("/@/views/dashboard/index.vue"),
     },
   ],
-  redirect: '/dashboard',
-}
+};
 
-export default dashboard
+export default dashboard;

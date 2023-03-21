@@ -1,16 +1,21 @@
-import { AppRouteRecordRaw } from '../types'
-
-const modules = import.meta.glob('./modules/**/*.ts', {
+import { AppRouteRecordRaw } from "../types";
+import Layout from "/@/layout/index.vue";
+const modules = import.meta.glob("./modules/**/*.ts", {
   eager: true,
-  import: 'default',
-})
+  import: "default",
+});
 
-const routeList: AppRouteRecordRaw[] = []
+const routeList: AppRouteRecordRaw[] = [];
 
 Object.keys(modules).forEach((key) => {
-  const mod = modules[key] || {}
-  const modList = Array.isArray(mod) ? [...mod] : [mod]
-  routeList.push(modList)
-})
+  const mod = modules[key] || {};
+  const modList = Array.isArray(mod) ? [...mod] : [mod];
+  routeList.push(modList);
+});
 
-export const routes = [routeList]
+const basicRoute: AppRouteRecordRaw = {
+  path: "/",
+  component: Layout,
+};
+
+export const routes = [basicRoute, routeList];
