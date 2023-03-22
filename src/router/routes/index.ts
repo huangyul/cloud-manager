@@ -1,21 +1,35 @@
-import { AppRouteRecordRaw } from "../types";
+import { RouteRecordRaw } from "vue-router";
 import Layout from "/@/layout/index.vue";
+
+// 直接引入所有modules中的路由
 const modules = import.meta.glob("./modules/**/*.ts", {
   eager: true,
   import: "default",
 });
 
-const routeList: AppRouteRecordRaw[] = [];
+const routeList: RouteRecordRaw[] = [];
 
 Object.keys(modules).forEach((key) => {
   const mod = modules[key] || {};
-  const modList = Array.isArray(mod) ? [...mod] : [mod];
-  routeList.push(modList);
+  routeList.push(mod as RouteRecordRaw);
 });
 
-const basicRoute: AppRouteRecordRaw = {
+const basicRoute: RouteRecordRaw = {
   path: "/",
+  name: "root",
   component: Layout,
+  redirect: "/dashboard",
+  children: [],
 };
 
-export const routes = [basicRoute, routeList];
+const loginRoute: RouteRecordRaw = {
+  path: "/login",
+  name: "login",
+  component: () => import("/@/views/login/index.vue"),
+};
+
+basicRoute.children = routeList.flat(2);
+
+console.log(basicRoute);
+
+export const routes = [basicRoute, loginRoute];
