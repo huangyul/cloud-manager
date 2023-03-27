@@ -1,15 +1,14 @@
-import { App } from "vue";
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import { useMultipleTabStore } from "../store/modules/multipleTab";
 import { routes } from "./routes";
 
 // 白名单路由
-const WHILE_NAME_LIST: string[] = [];
+const WHILE_NAME_LIST = [];
 // TODO 白名单要包含基本静态路由
 
 export const router = createRouter({
   history: createWebHashHistory(),
-  routes: routes as unknown as RouteRecordRaw[],
+  routes: routes,
 });
 
 router.beforeEach((to, from, next) => {
@@ -24,14 +23,14 @@ router.beforeEach((to, from, next) => {
 });
 
 export function resetRouter() {
-  router.getRoutes().forEach((route: any) => {
+  router.getRoutes().forEach((route) => {
     const { name } = route;
-    if (name & (!WHILE_NAME_LIST.includes(name) as any)) {
+    if (name & !WHILE_NAME_LIST.includes(name)) {
       router.hasRoute(name) && router.removeRoute(name);
     }
   });
 }
 
-export function setupRouter(app: App<Element>) {
+export function setupRouter(app) {
   app.use(router);
 }

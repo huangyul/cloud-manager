@@ -22,14 +22,9 @@
   </ul>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { computed } from "vue";
-import {
-  RouteLocationNormalizedLoaded,
-  RouteRecordName,
-  useRoute,
-  useRouter,
-} from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useMultipleTabStore } from "/@/store/modules/multipleTab";
 const route = useRoute();
 const router = useRouter();
@@ -38,11 +33,11 @@ const tabList = computed(() => {
   return tabStore.tabList;
 });
 
-const toPage = (item: RouteLocationNormalizedLoaded) => {
+const toPage = (item) => {
   if (item.path == route.path) {
     return;
   } else {
-    router.push({ name: item.name as RouteRecordName | undefined });
+    router.push({ name: item.name });
   }
 };
 
@@ -50,7 +45,7 @@ const toIndex = () => {
   router.push({ name: "root" });
 };
 
-const handleCloseTab = (item: RouteLocationNormalizedLoaded) => {
+const handleCloseTab = (item) => {
   tabStore.tabList.splice(
     tabList.value.findIndex((tab) => tab.name === item.name),
     1

@@ -1,5 +1,4 @@
-import { RouteRecordRaw } from "vue-router";
-const dashboard: RouteRecordRaw[] = [
+const dashboard = [
   {
     path: "dashboard",
     name: "dashboard",

@@ -1,5 +1,4 @@
-import { RouteRecordRaw } from "vue-router";
-const demo: RouteRecordRaw[] = [
+const demo = [
   {
     path: "demo-a",
     name: "demoA",

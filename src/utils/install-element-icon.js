@@ -1,8 +1,7 @@
-import { App } from "vue";
 import ElementPlus from "element-plus";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 
-export default function installElement(app: App) {
+export default function installElement(app) {
   app.use(ElementPlus);
 
   for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

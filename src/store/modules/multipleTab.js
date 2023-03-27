@@ -1,19 +1,14 @@
 import { defineStore } from "pinia";
-import { RouteLocationNormalized } from "vue-router";
-
-interface TabState {
-  tabList: RouteLocationNormalized[];
-}
 
 export const useMultipleTabStore = defineStore({
   id: "app-multiple-tab",
-  state: (): TabState => {
+  state: () => {
     return {
       tabList: [],
     };
   },
   getters: {
-    getTabList(): RouteLocationNormalized[] {
+    getTabList() {
       return this.tabList;
     },
   },

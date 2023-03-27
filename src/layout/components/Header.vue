@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import Tagview from "./tagview.vue";
 </script>
 

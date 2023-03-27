@@ -1,20 +1,19 @@
-import { RouteRecordRaw } from "vue-router";
 import Layout from "/@/layout/index.vue";
 
 // 直接引入所有modules中的路由
-const modules = import.meta.glob("./modules/**/*.ts", {
+const modules = import.meta.glob("./modules/**/*.js", {
   eager: true,
   import: "default",
 });
 
-const routeList: RouteRecordRaw[] = [];
+const routeList = [];
 
 Object.keys(modules).forEach((key) => {
   const mod = modules[key] || {};
-  routeList.push(mod as RouteRecordRaw);
+  routeList.push(mod);
 });
 
-const basicRoute: RouteRecordRaw = {
+const basicRoute = {
   path: "/",
   name: "root",
   component: Layout,
@@ -22,7 +21,7 @@ const basicRoute: RouteRecordRaw = {
   children: [],
 };
 
-const loginRoute: RouteRecordRaw = {
+const loginRoute = {
   path: "/login",
   name: "login",
   component: () => import("/@/views/login/index.vue"),
