@@ -25,10 +25,10 @@
       @mouseleave="closeSecondMenu(0)"
     >
       <el-scrollbar>
-        <div v-for="second in activeMenu.children">
+        <div class="second-item" v-for="second in activeMenu.children">
           <div class="title">{{ second.ModuleName }}</div>
           <div
-            class="second-menu-item"
+            class="third-menu-item"
             v-for="child in second.Subs"
             @click="toPage(child?.path)"
             @mouseover="hoverThridMenu(child.ModuleCode)"
@@ -240,36 +240,42 @@ onMounted(() => {
     padding: 24px 10px;
     overflow-y: auto;
     z-index: 999;
-    .title {
-      font-size: 14px;
-      font-family: Microsoft YaHei;
-      font-weight: bold;
-      color: #696c70;
-      line-height: 36px;
-      padding: 0 14px;
+    &:not(:last-child) {
+      margin-bottom: 10px;
+      border-bottom: 1px solid red;
     }
-    .second-menu-item {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 4px;
-      width: 180px;
-      height: 32px;
-      padding: 0 14px;
-      margin: 4px 0;
-      cursor: pointer;
-      font-size: 14px;
-      font-family: Microsoft YaHei;
-      font-weight: 400;
-      color: #696c70;
-      transition: all 0.1s ease;
-      &:hover {
-        background: #4996f3;
-        color: #ffffff;
+    .second-item {
+      .title {
+        font-size: 14px;
+        font-family: Microsoft YaHei;
+        font-weight: bold;
+        color: #696c70;
+        line-height: 36px;
+        padding: 0 14px;
       }
-      img {
-        width: 18px;
-        height: 18px;
-        margin-right: 9px;
+      .third-menu-item {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 4px;
+        width: 180px;
+        height: 32px;
+        padding: 0 14px;
+        margin: 4px 0;
+        cursor: pointer;
+        font-size: 14px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #696c70;
+        transition: all 0.1s ease;
+        &:hover {
+          background: #4996f3;
+          color: #ffffff;
+        }
+        img {
+          width: 18px;
+          height: 18px;
+          margin-right: 9px;
+        }
       }
     }
   }

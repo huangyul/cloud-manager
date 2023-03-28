@@ -4,7 +4,7 @@
     <el-dialog
       v-model="props.isShow"
       width="500px"
-      custom-class="dialog"
+      class="dialog"
       top="30vh"
       :show-close="false"
       :close-on-click-modal="false"
