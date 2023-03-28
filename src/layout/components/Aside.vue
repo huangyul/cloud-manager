@@ -13,7 +13,11 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { usePermissionStore } from "../../store/modules/permission";
+
+const permissionStore = usePermissionStore();
+</script>
 
 <style lang="scss" scoped>
 .aside {

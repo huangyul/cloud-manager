@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 
-function pathResolve(dir: string): string {
+function pathResolve(dir) {
   return resolve(process.cwd(), ".", dir);
 }
 
@@ -29,10 +29,9 @@ export default defineConfig(async ({ command, mode }) => {
     },
     server: {
       proxy: {
-        "/api": {
+        "/Api": {
           target: "http://192.168.16.154:8005",
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ""),
         },
       },
     },

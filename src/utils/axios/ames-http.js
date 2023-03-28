@@ -17,8 +17,6 @@ axiosInstance.interceptors.request.use(
     if (!whiteApi.includes(config.url)) {
       config = completeConfig(config);
     }
-    console.log(config);
-    console.log("config");
     return config;
   },
   function (error) {
@@ -30,12 +28,9 @@ axiosInstance.interceptors.request.use(
 // 添加响应拦截器
 axiosInstance.interceptors.response.use(
   function (response) {
-    console.log(response.data.Code);
     if (response.data.Code === 200) {
       return response.data.Result;
     } else {
-      console.log("error");
-      console.log(response.data.Message);
       ElMessage({
         message: response.data.Message,
         type: "error",
@@ -43,6 +38,10 @@ axiosInstance.interceptors.response.use(
     }
   },
   function (error) {
+    ElMessage({
+      type: "error",
+      message: error,
+    });
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
     return Promise.reject(error);
@@ -50,7 +49,7 @@ axiosInstance.interceptors.response.use(
 );
 
 export const amesFetch = ({ url, data, page = 1, pageSize = 20 }) => {
-  axiosInstance({
+  return axiosInstance({
     url: url,
     data: {
       ResultSerialize: false,
