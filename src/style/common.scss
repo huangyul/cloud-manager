@@ -1,0 +1,277 @@
+// 通用样式
+
+@for $i from 1 to 100 {
+  .m#{$i} {
+    margin: #{$i}px;
+  }
+  .mt#{$i} {
+    margin-top: #{$i}px;
+  }
+  .mb#{$i} {
+    margin-bottom: #{$i}px;
+  }
+  .mr#{$i} {
+    margin-right: #{$i}px;
+  }
+  .ml#{$i} {
+    margin-left: #{$i}px;
+  }
+  .p#{$i} {
+    padding: #{$i}px;
+  }
+  .pt#{$i} {
+    padding-top: #{$i}px;
+  }
+  .pb#{$i} {
+    padding-bottom: #{$i}px;
+  }
+  .pr#{$i} {
+    padding-right: #{$i}px;
+  }
+  .pl#{$i} {
+    padding-left: #{$i}px;
+  }
+}
+
+// 弹性布局相关
+.flex {
+  display: flex;
+}
+
+.flex-col-center {
+  align-items: center;
+}
+
+.flex-row-right {
+  @extend .flex;
+  justify-content: flex-end;
+}
+.flex-row-left {
+  @extend .flex;
+  justify-content: flex-start;
+}
+.flex-row-between {
+  @extend .flex;
+  justify-content: space-between;
+}
+
+@for $i from 1 to 8 {
+  .flex-#{$i} {
+    flex: $i;
+  }
+}
+
+// 搜索栏样式
+.search {
+  margin: 0 0 17px 0;
+  display: flex;
+  align-items: center;
+  .search-item {
+    display: flex;
+    align-items: center;
+    width: 25%;
+    .label {
+      text-align: right;
+      width: 120px;
+      margin-right: 10px;
+    }
+  }
+}
+.table {
+  // ele表格样式调整
+  th.el-table__cell {
+    background: #ebeced !important;
+    border: 0.5px solid #e5e5e5;
+  }
+  th.el-table__cell {
+    height: 36px !important;
+  }
+  td.el-table__cell {
+    height: 36px !important;
+  }
+  th.el-table__cell > .cell {
+    font-size: 13px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+    color: #5e6166;
+    line-height: 37px;
+    // background: #ebeced !important;
+  }
+  .el-table__cell {
+    padding: 0 !important;
+  }
+  .el-table__footer-wrapper .el-table__cell {
+    background: #fef9ea;
+  }
+  .page {
+    margin-top: 6px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
+
+.el-form-item {
+  margin-bottom: 14px !important;
+}
+.el-form-item__content {
+  min-height: 32px;
+}
+.el-radio {
+  margin-right: 12px !important;
+}
+.page {
+  padding: 20px;
+}
+.el-input-number {
+  width: 100% !important;
+}
+// 标题侧边小竖线
+.left-item {
+  position: relative;
+  padding-left: 10px;
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    display: inline-block;
+    width: 3px;
+    height: auto;
+    background-color: red;
+    content: ' ';
+  }
+}
+
+// 橙色下标
+.left-orange {
+  @extend .left-item;
+  &::before {
+    background: #f9c02e;
+  }
+}
+
+.el-dialog {
+  border-radius: 4px !important;
+}
+
+@for $i from 1 to 1000 {
+  .w#{$i} {
+    width: #{$i}px !important;
+  }
+  .h#{$i} {
+    height: #{$i}px !important;
+  }
+}
+
+.text-right {
+  text-align: right;
+}
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.confirm-black-text {
+  font-size: 17px;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: #2f3339;
+  line-height: 30px;
+}
+
+.confirm-blue-text {
+  @extend .confirm-black-text;
+  color: #338cef;
+  margin: 0 2px;
+}
+
+.confirm-red-text {
+  font-size: 15px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #ff4d4d;
+  line-height: 30px;
+}
+
+.table-top-tips {
+  position: absolute;
+  margin: 0;
+  top: -40px;
+  z-index: 9;
+  font-size: 14px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #f59c00;
+  display: flex;
+  align-items: center;
+  img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+  }
+}
+
+.btn {
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  min-width: 72px;
+  height: 32px;
+  line-height: 32px;
+  cursor: pointer;
+  padding: 10px 12px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-btn {
+  padding: 10px 22px;
+}
+
+.btn-blue {
+  background: #4996f3;
+  color: #ffffff;
+}
+
+.btn-grey {
+  background: #dddddd;
+  color: #5e6166;
+}
+
+.btn-green {
+  background: #13c287;
+  color: #ffffff;
+}
+
+// 表格里面的按钮通用样式
+.btn-table {
+  @extend .btn;
+  height: 28px;
+  min-width: 0;
+  padding: 0px 12px;
+}
+
+.can-click {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #318cf9;
+}
+
+.top-action {
+  padding: 9px 16px;
+  border-bottom: 1px solid #e6e6e6;
+  display: flex;
+  button:not(:last-child) {
+    margin-right: 10px;
+  }
+}

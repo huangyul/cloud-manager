@@ -10,7 +10,7 @@
       @click="toPage(item)"
       :class="[{ active: route.path == item.path }]"
     >
-      <span> {{ item.name }}</span>
+      <span> {{ item.meta.tabName ?? item.name }}</span>
 
       <el-icon
         class="close"

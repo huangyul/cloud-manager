@@ -1,8 +1,7 @@
 import { getToken } from "../api/basic";
 import { getUserPermission } from "../api/user";
 import { usePermissionStore } from "../store/modules/permission";
-import useUserStore from "../store/modules/user";
-
+import { useUserStore } from "../store/modules/user";
 // 没有用户数据，菜单权限时
 export async function useInitUser() {
   const res = await getUserPermission();
