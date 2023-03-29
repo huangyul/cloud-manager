@@ -228,8 +228,8 @@
 //   getTranTypeByBillType,
 //   generateOrderNum,
 //   updateInboune,
-// } from '@/api/inventory'
-// import { getWarehouseList } from '@/api/warehouse'
+// } from '/@/api/inventory'
+// import { getWarehouseList } from '/@/api/warehouse'
 import { ElMessage } from "element-plus";
 import { onMounted, ref, watch, watchEffect } from "vue";
 const emit = defineEmits(["reflesh"]);

@@ -108,7 +108,6 @@ const init = () => {
     );
     if (permission) {
       menu.children = permission.Subs;
-      debugger;
       if (menu.children.length > 0) {
         for (let i = 0; i < menu.children.length; i++) {
           if (menu.children[i].Subs?.length > 0) {
@@ -125,7 +124,7 @@ const init = () => {
 };
 const addRouteToMenu = (menu) => {
   const route = routes[0].children.find((route) => {
-    if (route.paht == "/member/exchange-rank") {
+    if (route.paht == "") {
       console.log(route.meta, menu.ModuleCode);
     }
     if (route?.meta?.ModuleCode) {
@@ -137,10 +136,14 @@ const addRouteToMenu = (menu) => {
   if (route) {
     menu.path = route.path ?? "";
     menu.meta = route.meta ?? {};
+    if (menu.ModuleCode == "Warehouse") {
+      console.log(menu);
+    }
   }
 };
 
 const toPage = (path = "") => {
+  console.log(path);
   if (path.length > 0) {
     router.push(path);
   }
@@ -166,7 +169,6 @@ const closeSecondMenu = (duration = 500) => {
 const activeThreeMenu = ref("");
 const hoverThridMenu = (code) => {
   activeThreeMenu.value = code;
-  console.log(activeThreeMenu.value);
 };
 const leaveThridMenu = () => {
   activeThreeMenu.value = "";

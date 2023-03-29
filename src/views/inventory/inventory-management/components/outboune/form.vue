@@ -182,8 +182,8 @@
 //   createOutboune,
 //   generateOrderNum,
 //   getTranTypeByBillType,
-// } from '@/api/inventory'
-// import { getWarehouseList } from '@/api/warehouse'
+// } from '/@/api/inventory'
+// import { getWarehouseList } from '/@/api/warehouse'
 import { ElMessage } from "element-plus";
 import { onMounted, ref, watch, watchEffect } from "vue";
 // 入仓类型

@@ -6,20 +6,20 @@ const inventory = [
     component: () => import("/@/views/inventory/warehouse/index.vue"),
     meta: {
       ModuleCode: "InventoryMgn",
-      icon: "库存管理",
-      tagName: "库存管理",
+      icon: "仓库管理",
+      tabName: "仓库管理",
     },
   },
   {
     // 库存管理
-    path: "/inventory",
+    path: "/inventory/inventory-management",
     name: "inventory",
     component: () =>
       import("/@/views/inventory/inventory-management/index.vue"),
     meta: {
-      ModuleCode: "InventoryMgn",
+      ModuleCode: "Warehouse",
       icon: "库存管理",
-      tagName: "库存管理",
+      tabName: "库存管理",
     },
   },
   // {

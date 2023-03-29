@@ -88,7 +88,7 @@
     </div>
     <div class="more">
       <img
-        src="/@/assets/image/common/extends.png"
+        src="/@/assets/images/common/extends.png"
         @click="onExpand"
         v-if="isExceed"
         :class="{ extends: isExpand }"

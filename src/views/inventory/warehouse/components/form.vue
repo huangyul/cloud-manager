@@ -68,7 +68,7 @@
 //   fetchWarehouseCode,
 //   getWarehouseDetailById,
 //   updateWarehouse,
-// } from '@/api/warehouse'
+// } from '/@/api/warehouse'
 import { ElMessage } from "element-plus";
 import { onMounted, ref } from "vue";
 const props = defineProps({

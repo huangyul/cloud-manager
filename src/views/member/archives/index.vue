@@ -175,7 +175,7 @@ import MemberDetail from "/@/views/member/archives/components/MemberDetail.vue";
 // import {
 //   getMemberArchivesByDetails,
 //   getMemberArchivesByMember,
-// } from '@/api/member'
+// } from '/@/api/member'
 import { openMemberDetail } from "/@/utils/helper.js";
 import moment from "moment";
 

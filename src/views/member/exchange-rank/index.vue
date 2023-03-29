@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-// import { getExchangeData } from '@/api/member'
+// import { getExchangeData } from '/@/api/member'
 import { timeSlotChange, openMemberDetail } from "/@/utils/helper";
 import { ref, onMounted } from "vue";
 

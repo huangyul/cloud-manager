@@ -194,7 +194,7 @@ import ConfirmDialog from "/@/components/common/ConfirmDialog.vue";
 //   getOutbouneOrderList,
 //   getTranTypeByBillType,
 //   submitOutboune,
-// } from '@/api/inventory'
+// } from '/@/api/inventory'
 import { ElMessage } from "element-plus";
 // -2-全部；0已保存;1已提交;-1作废
 const statusMap = new Map([

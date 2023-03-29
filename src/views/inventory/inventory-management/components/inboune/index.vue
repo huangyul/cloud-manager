@@ -206,7 +206,7 @@ import ConfirmDialog from "/@/components/common/ConfirmDialog.vue";
 //   getInbouneOrderList,
 //   submitInboune,
 //   getTranTypeByBillType,
-// } from '@/api/inventory'
+// } from '/@/api/inventory'
 import { ElMessage } from "element-plus";
 
 // -2-全部；0已保存;1已提交;-1作废

@@ -78,7 +78,7 @@
 </template>
 
 <script setup>
-// import { getRecoveryData } from '@/api/member'
+// import { getRecoveryData } from '/@/api/member'
 import { openMemberDetail, timeSlotChange } from "/@/utils/helper";
 import { ref, onMounted } from "vue";
 

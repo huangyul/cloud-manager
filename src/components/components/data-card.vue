@@ -13,7 +13,7 @@
       :content="tooltip"
       placement="top-start"
     >
-      <img src="@/assets/image/home/board-help.png" class="que" />
+      <img src="@/assets/images/home/board-help.png" class="que" />
     </el-tooltip>
     <!--  -->
     <div class="top">
@@ -26,7 +26,7 @@
     <!--  -->
     <!-- <div class="bottom">
 			<div class="item">日均: {{ day }}</div>
-			<div class="item">日环比: {{ chain }}<img src="@/assets/image/home/up.png" class="icon" /></div>
+			<div class="item">日环比: {{ chain }}<img src="@/assets/images/home/up.png" class="icon" /></div>
 		</div> -->
   </div>
 </template>

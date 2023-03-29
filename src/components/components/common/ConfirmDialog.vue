@@ -12,7 +12,7 @@
       <div class="container">
         <div class="content">
           <div class="mr10" style="height: 32px">
-            <img src="@/assets/image/common/inquiry.png" />
+            <img src="@/assets/images/common/inquiry.png" />
           </div>
           <slot></slot>
         </div>
