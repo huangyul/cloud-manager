@@ -3,7 +3,9 @@
     <MyHeader></MyHeader>
     <div class="container">
       <Aside class="aside"></Aside>
-      <RouterView class="content"></RouterView>
+      <div>
+        <RouterView class="content"></RouterView>
+      </div>
     </div>
   </div>
 </template>
