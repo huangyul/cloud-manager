@@ -9,7 +9,7 @@ export function generateSign(tokenId, secureKey, dataLength, UUID) {
 
 // headers里面加入云管家请求所需验证参数
 export default function completeConfig(config) {
-  const UUID = crypto.randomUUID();
+  const UUID = uuid();
   const tokenId = localStorage.getItem("token");
   // TODO
   const secureKey = "8630FC8C-13E8-40C7-B6F2-17E38FA4BC76";
@@ -26,4 +26,11 @@ export default function completeConfig(config) {
     "AemsCloud-Sign": sign,
   });
   return config;
+}
+
+function uuid() {
+  var temp_url = URL.createObjectURL(new Blob());
+  var uuid = temp_url.toString(); // blob:https://xxx.com/b250d159-e1b6-4a87-9002-885d90033be3
+  URL.revokeObjectURL(temp_url);
+  return uuid.substr(uuid.lastIndexOf("/") + 1);
 }

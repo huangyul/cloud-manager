@@ -14,7 +14,7 @@
 
       <el-icon
         class="close"
-        v-if="route.path != item.path"
+        :class="{ 'close-active': route.path == item.path }"
         @click.stop="handleCloseTab(item)"
         ><Close
       /></el-icon>
@@ -46,10 +46,21 @@ const toIndex = () => {
 };
 
 const handleCloseTab = (item) => {
+  let index = 0;
   tabStore.tabList.splice(
-    tabList.value.findIndex((tab) => tab.name === item.name),
+    (index = tabList.value.findIndex((tab) => tab.name === item.name)),
     1
   );
+  // 如果是关掉当前的页面
+  if (item.path == route.path) {
+    if (tabStore.tabList.length === 0) {
+      router.replace("/");
+    } else if (index + 1 >= tabStore.tabList.length) {
+      router.replace(tabStore.tabList[index - 1].path);
+    } else {
+      router.replace(tabStore.tabList[index].path);
+    }
+  }
 };
 </script>
 
@@ -79,13 +90,19 @@ ul {
       font-family: Microsoft YaHei;
     }
     .close {
-      width: 14px;
-      height: 14px;
       border-radius: 50%;
       margin-left: 8px;
+      width: 16px;
+      height: 16px;
+      font-size: 14px;
+
       // &:hover {
       //   background: rgba($color: #ffffff, $alpha: 0.3);
       // }
+    }
+    .close-active {
+      color: #ffffff;
+      background: #6d95c9;
     }
   }
   .active {

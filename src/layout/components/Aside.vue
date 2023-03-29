@@ -64,6 +64,12 @@ const menuList = ref([
     icon: "business",
   },
   {
+    name: "销售",
+    icon: "",
+    children: [],
+    ModuleCode: "mnuSetcoinManagement",
+  },
+  {
     name: "商品",
     ModuleCode: "mnuAssetManagement",
     children: [],
@@ -232,7 +238,7 @@ onMounted(() => {
     top: 0;
     bottom: 0;
     left: 90px;
-    padding: 24px 10px;
+    padding: 0 10px;
     overflow-y: auto;
     z-index: 999;
     &:not(:last-child) {
@@ -240,6 +246,18 @@ onMounted(() => {
       border-bottom: 1px solid red;
     }
     .second-item {
+      padding: 10px 0;
+      position: relative;
+      &:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        width: 160px;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 1px;
+        background: #e6e6e6;
+      }
       .title {
         font-size: 14px;
         font-family: Microsoft YaHei;
