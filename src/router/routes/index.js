@@ -29,6 +29,4 @@ const loginRoute = {
 
 basicRoute.children = routeList.flat(2);
 
-console.log(basicRoute);
-
 export const routes = [basicRoute, loginRoute];

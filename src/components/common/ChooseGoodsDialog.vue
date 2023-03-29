@@ -229,7 +229,6 @@ let isChooseTagDialogShow = ref(false);
 watch(
   () => props.isChooseDialogShow,
   (value) => {
-    console.log(value);
     if (value) {
       doSearch();
     }

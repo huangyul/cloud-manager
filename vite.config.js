@@ -7,7 +7,6 @@ function pathResolve(dir) {
 }
 
 const images = pathResolve("src/assets/images/");
-console.log(images);
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ command, mode }) => {

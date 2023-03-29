@@ -481,7 +481,6 @@ let orderData = ref(null);
 let memberData = ref(null);
 // 打开弹窗
 const openDialog = (type, row) => {
-  console.log(row);
   switch (type) {
     case "order":
       dialogTitle.value = "订单状态";

@@ -124,9 +124,6 @@ const init = () => {
 };
 const addRouteToMenu = (menu) => {
   const route = routes[0].children.find((route) => {
-    if (route.paht == "") {
-      console.log(route.meta, menu.ModuleCode);
-    }
     if (route?.meta?.ModuleCode) {
       return route.meta.ModuleCode == menu.ModuleCode;
     } else {
@@ -136,14 +133,10 @@ const addRouteToMenu = (menu) => {
   if (route) {
     menu.path = route.path ?? "";
     menu.meta = route.meta ?? {};
-    if (menu.ModuleCode == "Warehouse") {
-      console.log(menu);
-    }
   }
 };
 
 const toPage = (path = "") => {
-  console.log(path);
   if (path.length > 0) {
     router.push(path);
   }
