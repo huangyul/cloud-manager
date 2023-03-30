@@ -164,6 +164,20 @@
   }
 }
 
+.w-100 {
+  width: 100%;
+}
+.h-100 {
+  height: 100%;
+}
+
+.w-25 {
+  width: 25%;
+}
+.w-50 {
+  width: 50%;
+}
+
 .text-right {
   text-align: right;
 }
@@ -274,4 +288,9 @@
   button:not(:last-child) {
     margin-right: 10px;
   }
+}
+
+.br {
+  height: 1px;
+  background: #e6e6e6;
 }
