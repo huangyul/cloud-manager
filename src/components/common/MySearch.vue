@@ -66,7 +66,7 @@
           <!-- 标签选择 -->
           <div v-if="value.type == 'select-tag'" class="item-input">
             <div>tag list</div>
-            <div class="tag-btn">选择</div>
+            <div class="tag-btn" @click="">选择</div>
           </div>
           <el-checkbox-group
             v-if="value.type === 'checkbox'"
@@ -102,7 +102,7 @@ import { deepClone, getCTime, timeSlotChange } from "/@/utils/helper";
 
 import { onMounted, ref, watch } from "vue";
 
-const emits = defineEmits(["search"]);
+const emits = defineEmits(["search", "choose-tags"]);
 
 const props = defineProps({
   // 超过多少行折叠，默认两行
@@ -365,12 +365,13 @@ onMounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: pointer;
       }
       .item-input {
         display: inline-flex;
         align-items: center;
         justify-content: space-between;
-        padding: 4px;
+        padding: 4px 11px;
         height: 32px;
         width: 100%;
         box-sizing: border-box;

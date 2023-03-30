@@ -184,6 +184,16 @@
             <button class="btn-blue btn-table">删除</button>
           </template>
         </el-table-column>
+        <el-table-column label="操作" min-width="140">
+          <template #default>
+            <button class="btn-blue btn-table">提交</button>
+            <button class="btn-blue btn-table">删除</button>
+            <button class="btn-blue btn-table">变更</button>
+            <button class="btn-blue btn-table">上架</button>
+            <button class="btn-blue btn-table">下架</button>
+            <button class="btn-blue btn-table">跟踪</button>
+          </template>
+        </el-table-column>
       </el-table>
 
       <!-- 分页-->
@@ -222,14 +232,6 @@
 </template>
 
 <script setup>
-// import {
-//   createInboune,
-//   fetchInbouneDetailByID,
-//   getTranTypeByBillType,
-//   generateOrderNum,
-//   updateInboune,
-// } from '/@/api/inventory'
-// import { getWarehouseList } from '/@/api/warehouse'
 import { ElMessage } from "element-plus";
 import { onMounted, ref, watch, watchEffect } from "vue";
 const emit = defineEmits(["reflesh"]);

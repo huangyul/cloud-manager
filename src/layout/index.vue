@@ -4,7 +4,7 @@
     <div class="container">
       <Aside class="aside"></Aside>
       <div class="content">
-        <RouterView></RouterView>
+        <RouterView :includes="aliveRoutes"></RouterView>
       </div>
     </div>
   </div>
@@ -13,6 +13,18 @@
 <script setup>
 import MyHeader from "./components/Header.vue";
 import Aside from "./components/Aside.vue";
+import { computed } from "vue";
+import { useMultipleTabStore } from "/@/store/modules/multipleTab";
+
+const tabStore = useMultipleTabStore();
+
+const aliveRoutes = computed(() => {
+  let res = [];
+  tabStore.tabList.forEach((tab) => {
+    res.push(tab.name);
+  });
+  return res;
+});
 </script>
 
 <style lang="scss" scoped>
