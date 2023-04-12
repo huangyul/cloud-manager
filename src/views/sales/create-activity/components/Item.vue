@@ -1,4 +1,6 @@
 <script setup>
+import { inject } from "vue";
+
 const props = defineProps({
   icon: {
     type: String,
@@ -7,13 +9,18 @@ const props = defineProps({
   name: String,
   type: String,
 });
+
+const { setEdit, setList } = inject("created");
+const handleCreate = () => {
+  setEdit();
+};
 </script>
 
 <template>
   <div class="box">
     <img :src="icon" />
     <p class="name">{{ name }}</p>
-    <div class="box-btn">立即创建</div>
+    <div class="box-btn" @click="handleCreate">立即创建</div>
   </div>
 </template>
 

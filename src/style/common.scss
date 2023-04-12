@@ -1,6 +1,6 @@
 // 通用样式
 
-@for $i from 1 to 100 {
+@for $i from 1 to 200 {
   .m#{$i} {
     margin: #{$i}px;
   }
@@ -38,7 +38,9 @@
   display: flex;
 }
 
-.flex-col-center {
+.flex-col-center,
+.flex-align-center {
+  @extend .flex;
   align-items: center;
 }
 
@@ -59,6 +61,11 @@
   .flex-#{$i} {
     flex: $i;
   }
+}
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 // 搜索栏样式
@@ -121,7 +128,7 @@
   margin-right: 12px !important;
 }
 .page {
-  padding: 20px;
+  padding: 8px 0;
 }
 .el-input-number {
   width: 100% !important;

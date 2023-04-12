@@ -1,32 +1,60 @@
 <!-- 步骤条 -->
 <script setup>
+import { onMounted, ref } from "vue";
+
 const list = [
   {
     name: "基本信息",
-    value: "basic",
+    value: "baseInfo",
   },
   {
     name: "活动详情",
-    value: "detail",
+    value: "activityDetail",
   },
   {
     name: "渠道销售",
-    value: "channel",
-  },
-  {
-    name: "标签方案",
-    value: "tags",
+    value: "salesChannel",
   },
   {
     name: "其他",
     value: "other",
   },
 ];
+
+const cur = ref("");
+
+onMounted(() => {
+  cur.value = list[0].value;
+});
+
+const changeCur = (value = "") => {
+  cur.value = value;
+};
+
+const scrollToSection = (event, type) => {
+  event.preventDefault();
+  cur.value = type;
+  const targetElement = document.querySelector(`#${type}`);
+  if (targetElement) {
+    targetElement.scrollIntoView({
+      behavior: "smooth",
+    });
+  }
+};
+
+defineExpose({
+  changeCur,
+});
 </script>
 
 <template>
   <div class="list">
-    <div class="item active" v-for="(item, index) in list">
+    <div
+      class="item"
+      :class="{ active: cur == item.value }"
+      v-for="(item, index) in list"
+      @click="scrollToSection($event, item.value)"
+    >
       {{ item.name }}
       <el-icon :size="9" v-if="index + 1 <= list.length - 1"
         ><ArrowRight

@@ -94,6 +94,9 @@
 <script setup>
 import MySearch from "/@/components/common/MySearch.vue";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const searchList = ref({
   leager_id: {
@@ -146,6 +149,11 @@ let tableData = ref([{ id: 1 }]);
 let pageSize = ref(10);
 let currentPage = ref(1);
 let total = ref(0);
+
+// 创建活动
+const openDialog = () => {
+  router.push({ name: "createActivity" });
+};
 </script>
 
 <script lang="scss" scoped></script>

@@ -11,7 +11,7 @@
       <!-- header区 -->
       <template #header>
         <div class="header">
-          <div>选择商品标签</div>
+          <div>选择销售页面</div>
           <div class="close" @click="close">
             <el-icon><Close /></el-icon>
           </div>
@@ -21,7 +21,7 @@
         <div class="left mr16">
           <div class="search">
             <div class="search-text">请选择销售页面，可多选</div>
-            <input class="input" type="text" placeholder="搜索标签" />
+            <input class="input" type="text" placeholder="搜索" />
           </div>
           <div class="content">
             <el-scrollbar height="440px"> </el-scrollbar>
@@ -29,7 +29,7 @@
         </div>
         <div class="right">
           <div class="total">
-            <div class="total-num">已选标签（3）</div>
+            <div class="total-num">已选页面（3）</div>
             <button>清空</button>
           </div>
           <div class="content"></div>

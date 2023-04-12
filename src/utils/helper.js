@@ -194,3 +194,33 @@ export function getCTime(date) {
 
   return nowTime;
 }
+
+// 节流完整版，可选前缘节流或延迟节流
+export function throttle(fn, delay, isImmediate = true) {
+  // isImmediate 为 true 时使用前缘节流，首次触发会立即执行，为 false 时使用延迟节流，首次触发不会立即执行
+  let last = Date.now();
+  return function () {
+    let now = Date.now();
+    if (isImmediate) {
+      fn.apply(this, arguments);
+      isImmediate = !isImmediate;
+    }
+    if (now - last >= delay) {
+      fn.apply(this, arguments);
+      last = now;
+    }
+  };
+}
+
+// 防抖
+export function debounce(fn, delay) {
+  let timerId = null;
+
+  return function (...args) {
+    clearTimeout(timerId);
+
+    timerId = setTimeout(() => {
+      fn.apply(this, args);
+    }, delay);
+  };
+}
