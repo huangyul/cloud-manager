@@ -4,7 +4,7 @@
     <el-dialog
       v-model="props.isShow"
       :destroy-on-close="true"
-      :width="900"
+      :width="1100"
       :show-close="false"
       :before-close="close"
     >
@@ -17,11 +17,6 @@
           </div>
         </div>
       </template>
-      <VueDraggableNext :list="list" @change="log">
-        <el-row>
-          <el-col v-for="i in list" :key="i.id" :span="5">{{ i.name }}</el-col>
-        </el-row>
-      </VueDraggableNext>
       <!-- footer区 -->
       <template #footer>
         <div class="footer">
@@ -34,7 +29,6 @@
 </template>
 
 <script setup>
-import { VueDraggableNext } from "vue-draggable-next";
 import { ref } from "vue";
 const props = defineProps({
   isShow: {

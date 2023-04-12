@@ -23,9 +23,7 @@
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.33",
     "vue": "^3.2.45",
-    "vue-draggable-next": "^2.1.1",
-    "vue-router": "4",
-    "vuedraggable": "^2.24.3"
+    "vue-router": "4"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
