@@ -68,6 +68,10 @@
   flex-wrap: wrap;
 }
 
+.flex-shrink {
+  flex-shrink: 0;
+}
+
 // 搜索栏样式
 .search {
   margin: 0 0 17px 0;
@@ -300,4 +304,22 @@
 .br {
   height: 1px;
   background: #e6e6e6;
+}
+
+/* 滚动条的样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* 滑块样式 */
+::-webkit-scrollbar-thumb {
+  background: #cacaca;
+  border-radius: 3px;
+}
+
+/* 轨道样式 */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
 }

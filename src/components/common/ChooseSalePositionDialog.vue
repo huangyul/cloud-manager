@@ -17,6 +17,82 @@
           </div>
         </div>
       </template>
+
+      <div class="contain flex">
+        <!-- 销售页面选择 -->
+        <div class="sale-page">
+          <div>
+            <div class="title">销售页面</div>
+            <div class="page-list">
+              <div class="page-item page-active">店长精选</div>
+              <div class="page-item">零售精选</div>
+            </div>
+          </div>
+          <div class="title2">
+            <p>未分配套餐</p>
+            <div style="position: relative; width: 240px; height: 125px">
+              <DragItem
+                domId="drag"
+                type="drag"
+                title="50代币充值"
+                value="0.01"
+              ></DragItem>
+            </div>
+          </div>
+        </div>
+        <!-- 套餐位置 -->
+        <div class="packages">
+          <div class="title">销售套餐</div>
+          <div class="box">
+            <div class="row">
+              <DragItem
+                class="mr6 mb6 flex-shrink"
+                v-for="i in 8"
+                type="empty"
+                title="50代币充值"
+                value="0.01"
+              ></DragItem>
+            </div>
+            <div class="row">
+              <DragItem
+                class="mr6 mb6 flex-shrink"
+                v-for="i in 8"
+                type="empty"
+                title="50代币充值"
+                value="0.01"
+              ></DragItem>
+            </div>
+            <div class="row">
+              <DragItem
+                class="mr6 mb6 flex-shrink"
+                v-for="i in 8"
+                type="empty"
+                title="50代币充值"
+                value="0.01"
+              ></DragItem>
+            </div>
+            <div class="row">
+              <DragItem
+                class="mr6 mb6 flex-shrink"
+                v-for="i in 8"
+                type="empty"
+                title="50代币充值"
+                value="0.01"
+              ></DragItem>
+            </div>
+            <div class="row">
+              <DragItem
+                class="mr6 mb6 flex-shrink"
+                v-for="i in 8"
+                type="empty"
+                title="50代币充值"
+                value="0.01"
+              ></DragItem>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- footer区 -->
       <template #footer>
         <div class="footer">
@@ -30,6 +106,7 @@
 
 <script setup>
 import { ref } from "vue";
+import DragItem from "./DragItem.vue";
 const props = defineProps({
   isShow: {
     type: Boolean,
@@ -120,6 +197,53 @@ const log = (event) => {
   .footer {
     display: flex;
     justify-content: flex-end;
+  }
+  .contain {
+    border-bottom: 1px solid #eeeeee;
+    .sale-page {
+      padding: 10px 15px;
+      width: 280px;
+      border-right: 1px solid #eeeeee;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .title {
+        font-size: 15px;
+        font-weight: bold;
+        color: #2f3339;
+      }
+      .page-list {
+        .page-item {
+          padding: 10px 15px 10px 34px;
+          font-size: 15px;
+          display: flex;
+          align-items: center;
+          border-radius: 6px;
+          cursor: pointer;
+          margin-bottom: 5px;
+          word-break: break-all;
+        }
+        .page-active {
+          background: #7eaefe;
+          color: #fff;
+        }
+      }
+    }
+    .packages {
+      padding: 10px 15px;
+      overflow: auto;
+      max-height: 600px;
+      .title {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+      .box {
+        position: relative;
+        .row {
+          display: flex;
+        }
+      }
+    }
   }
 }
 </style>
