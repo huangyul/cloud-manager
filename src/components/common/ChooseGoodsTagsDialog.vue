@@ -20,48 +20,58 @@
       <div class="pt11 pb11 pr20 pl20 flex-row-between">
         <div class="left mr16">
           <div class="search">
-            <input class="input" type="text" placeholder="搜索标签" /><span
-              class="tips ml19"
-              >（请选择标签，可多选）</span
-            >
+            <input
+              class="input"
+              type="text"
+              placeholder="搜索标签"
+              v-model="key"
+              @change="handleInputChange"
+            /><span class="tips ml19">（请选择标签，可多选） </span>
           </div>
           <div class="content">
-            <el-scrollbar height="408px">
-              <div class="item" v-for="(item, index) in tagList" :key="index">
+            <el-scrollbar height="408px" v-if="tagListShow.length > 0">
+              <div
+                class="item"
+                v-for="(item, index) in tagListShow"
+                :key="index"
+              >
                 <div class="item-left">{{ item.name }}</div>
                 <div class="item-right">
                   <div
                     :class="[
                       'right-item',
-                      { 'right-item-active': index % 2 == 0 },
+                      { 'right-item-active': tagMap.has(tag.value) },
                     ]"
                     v-for="tag in item.tags"
                     :key="tag"
+                    @click="handleSelectTag(tag, item)"
                   >
-                    {{ tag }}
+                    {{ tag.name }}
                   </div>
                 </div>
               </div>
             </el-scrollbar>
+            <div v-else class="no-more">无数据</div>
           </div>
         </div>
         <div class="right">
           <div class="total">
-            <div class="total-num">已选标签（3）</div>
-            <button>清空</button>
+            <div class="total-num">已选标签（{{ selectedTagNum }}）</div>
+            <button @click="handleClearTags">清空</button>
           </div>
           <div class="content">
-            <div class="title">用途：</div>
-            <div class="value-list">
-              <div class="value" v-for="i in 3" :key="i">
-                礼品兑换<el-icon><Close /></el-icon>
-              </div>
-            </div>
-            <div class="title">用途：</div>
-            <div class="value-list">
-              <div class="value" v-for="i in 3" :key="i">
-                礼品兑换<el-icon><Close /></el-icon>
-              </div>
+            <div v-for="i in selectedTags" class="mb16">
+              <template v-if="i.tags.length > 0">
+                <div class="title">{{ i.name }}</div>
+                <div class="value-list">
+                  <div class="value" v-for="t in i.tags" :key="t.value">
+                    {{ t.name
+                    }}<el-icon @click="handleSelectTag(t, i)"
+                      ><Close
+                    /></el-icon>
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
         </div>
@@ -78,7 +88,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 const props = defineProps({
   isShow: {
     type: Boolean,
@@ -89,37 +99,99 @@ const props = defineProps({
 const emits = defineEmits(["update:isShow", "confirm"]);
 
 const tagList = ref([
-  { name: "用途", tags: ["礼品兑换", "彩票兑换", "礼物机"] },
-  { name: "五一优惠活动", tags: ["不用劳动", "要努力劳动"] },
+  {
+    name: "用途",
+    id: 1,
+    tags: [
+      { name: "礼品兑换", value: 1 },
+      { name: "彩票兑换", value: 2 },
+      { name: "礼物机", value: 3 },
+    ],
+  },
+  {
+    name: "五一优惠活动",
+    id: 2,
+    tags: [
+      { name: "不用劳动", value: 4 },
+      { name: "要努力劳动", value: 5 },
+    ],
+  },
   {
     name: "仓库",
+    id: 3,
     tags: [
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
-      "仓库1",
+      { name: "仓库1", value: 6 },
+      { name: "仓库1", value: 13 },
+      { name: "仓库1", value: 7 },
+      { name: "仓库1", value: 14 },
+      { name: "仓库1", value: 8 },
+      { name: "仓库1", value: 15 },
+      { name: "仓库1", value: 9 },
+      { name: "仓库1ssssssssssssss", value: 17 },
+      { name: "仓库1", value: 10 },
+      { name: "仓库1", value: 18 },
+      { name: "仓库1", value: 11 },
+      { name: "仓库1", value: 20 },
+      { name: "仓库1", value: 12 },
     ],
   },
 ]);
-
+const tagListShow = ref([]);
+// 已选择的标签
+const selectedTags = ref([]);
+const tagMap = ref(new Map());
+const selectedTagNum = computed(() => {
+  let num = 0;
+  selectedTags.value.forEach((t) => {
+    num += t.tags.length;
+  });
+  return num;
+});
+const handleSelectTag = (tag, parent) => {
+  if (tagMap.value.has(tag.value)) {
+    tagMap.value.delete(tag.value);
+    for (let i = 0; i < selectedTags.value.length; i++) {
+      if (selectedTags.value[i].id == parent.id) {
+        selectedTags.value[i].tags.forEach((value, index, arr) => {
+          if (value.value == tag.value) {
+            arr.splice(index, 1);
+          }
+        });
+        break;
+      }
+    }
+  } else {
+    tagMap.value.set(tag.value, tag.name);
+    for (let i = 0; i < selectedTags.value.length; i++) {
+      console.log(selectedTags.value[i].id, parent.id);
+      if (selectedTags.value[i].id == parent.id) {
+        selectedTags.value[i].tags.push({ ...tag });
+        console.log(selectedTags.value);
+        break;
+      }
+    }
+  }
+};
+const handleClearTags = () => {
+  tagMap.value.clear();
+  selectedTags.value.forEach((i) => (i.tags = []));
+};
 // 表格数据
 let tableData = ref([{ id: 1 }]);
 let pageSize = ref(10);
 let currentPage = ref(1);
 let total = ref(0);
 
-const searchList = ref({
-  name: "",
+let key = ref("");
+watch(key, (val) => {
+  if (val) {
+    tagListShow.value = [];
+    tagListShow.value = tagList.value.filter((item) =>
+      item.tags.some((tag) => tag.name.includes(val))
+    );
+  } else {
+    tagListShow.value = tagList.value;
+  }
 });
 
 // 关闭弹窗
@@ -131,104 +203,113 @@ const close = () => {
 const onConfirm = () => {
   emits("confirm");
 };
+
+onMounted(() => {
+  tagListShow.value = tagList.value;
+  tagList.value.forEach((i) => {
+    selectedTags.value.push({
+      name: i.name,
+      id: i.id,
+      tags: [],
+    });
+  });
+});
 </script>
 
 <style lang="scss" scoped>
-.items-page {
-  ::v-deep .el-dialog {
-    border-radius: 4px;
-    background: #f8fafc;
-  }
-  ::v-deep .el-dialog__header {
-    padding: 0;
-    margin: 0;
-  }
-  ::v-deep .el-dialog__body {
-    padding: 0;
-  }
-  .header {
-    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
-    height: 39px;
-    background: #f1f2f3;
-    box-shadow: 0px 1px 0px 0px #dddddd;
-    font-size: 16px;
+::v-deep .el-dialog {
+  border-radius: 4px;
+  background: #f8fafc;
+}
+::v-deep .el-dialog__header {
+  padding: 0;
+  margin: 0;
+}
+::v-deep .el-dialog__body {
+  padding: 0;
+}
+.header {
+  border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
+  height: 39px;
+  background: #f1f2f3;
+  box-shadow: 0px 1px 0px 0px #dddddd;
+  font-size: 16px;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: #5e6166;
+  padding: 0 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  .tag {
+    font-size: 15px;
     font-family: Microsoft YaHei;
     font-weight: bold;
-    color: #5e6166;
-    padding: 0 15px;
+    color: #ffffff;
+    padding: 6px 10px;
+    border-radius: 3px;
+  }
+  .green {
+    background: #0cba63;
+  }
+  .red {
+    background: #ff4f4f;
+  }
+  .orange {
+    background: #ff9604;
+  }
+  .close {
+    color: #99a2a7;
+    opacity: 0.75;
+    cursor: pointer;
+  }
+}
+.footer {
+  display: flex;
+  justify-content: flex-end;
+}
+.input-tags {
+  width: 100%;
+  height: 32px;
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  padding: 4px;
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  .tag-list {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
+    justify-content: flex-start;
+    .tag:not(:last-child) {
+      margin-right: 4px;
+    }
     .tag {
-      font-size: 15px;
+      background: #e1eefd;
+      height: 24px;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
       font-family: Microsoft YaHei;
-      font-weight: bold;
-      color: #ffffff;
-      padding: 6px 10px;
-      border-radius: 3px;
+      font-weight: 400;
+      color: #318cf9;
+      padding: 7px 8px 5px 8px;
     }
-    .green {
-      background: #0cba63;
-    }
-    .red {
-      background: #ff4f4f;
-    }
-    .orange {
-      background: #ff9604;
-    }
-    .close {
-      color: #99a2a7;
-      opacity: 0.75;
+    .el-icon {
       cursor: pointer;
     }
   }
-  .footer {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .input-tags {
-    width: 100%;
-    height: 32px;
-    background: #ffffff;
-    border: 1px solid #d8d8d8;
-    border-radius: 4px;
-    padding: 4px;
-    display: flex;
-    align-content: center;
-    justify-content: space-between;
-    .tag-list {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      .tag:not(:last-child) {
-        margin-right: 4px;
-      }
-      .tag {
-        background: #e1eefd;
-        height: 24px;
-        border-radius: 2px;
-        display: flex;
-        align-items: center;
-        font-size: 12px;
-        font-family: Microsoft YaHei;
-        font-weight: 400;
-        color: #318cf9;
-        padding: 7px 8px 5px 8px;
-      }
-      .el-icon {
-        cursor: pointer;
-      }
-    }
-    .choose-btn {
-      height: 24px;
-      background: #4996f3;
-      border-radius: 2px;
-      color: #ffffff;
-      line-height: 24px;
-      border: none;
-    }
+  .choose-btn {
+    height: 24px;
+    background: #4996f3;
+    border-radius: 2px;
+    color: #ffffff;
+    line-height: 24px;
+    border: none;
   }
 }
 
@@ -308,6 +389,11 @@ const onConfirm = () => {
         }
       }
     }
+    .no-more {
+      text-align: center;
+      margin-top: 30px;
+      color: #97999c;
+    }
   }
 }
 .right {
@@ -334,6 +420,7 @@ const onConfirm = () => {
       font-family: Microsoft YaHei;
       font-weight: 400;
       color: #5e6166;
+      cursor: pointer;
     }
   }
   .content {
@@ -342,6 +429,7 @@ const onConfirm = () => {
     background: #ffffff;
     border: 1px solid #e6e6e6;
     padding: 13px 12px;
+    overflow-y: auto;
     .title {
       font-size: 13px;
       font-family: Microsoft YaHei;
@@ -365,6 +453,9 @@ const onConfirm = () => {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        i {
+          cursor: pointer;
+        }
       }
       .value:not(:last-child) {
         margin-bottom: 5px;

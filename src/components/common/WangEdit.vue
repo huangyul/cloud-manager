@@ -50,9 +50,6 @@ const editorConfig = {
       onBeforeUpload(file) {
         console.log("onBeforeUpload", file);
         return false;
-
-        // return file  will upload this file
-        // return false // prevent upload
       },
     },
   },

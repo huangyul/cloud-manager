@@ -65,8 +65,14 @@
           </div>
           <!-- 标签选择 -->
           <div v-if="value.type == 'select-tag'" class="item-input">
-            <div>tag list</div>
-            <div class="tag-btn" @click="">选择</div>
+            <div class="tag-box">
+              <div class="tag-item" v-for="i in 2">
+                标签名称：标签值
+                <el-icon class="tag-close"><Close /></el-icon>
+              </div>
+              <div class="tag-more" @click="openTagDialog">+ 2</div>
+            </div>
+            <div class="tag-btn" @click="openTagDialog">选择</div>
           </div>
           <el-checkbox-group
             v-if="value.type === 'checkbox'"
@@ -94,6 +100,11 @@
         :class="{ extends: isExpand }"
       />
     </div>
+
+    <!-- 便签选择弹窗 -->
+    <ChooseGoodsTagsDialog
+      v-model:isShow="isDialogShow"
+    ></ChooseGoodsTagsDialog>
   </div>
 </template>
 
@@ -101,6 +112,7 @@
 import { deepClone, getCTime, timeSlotChange } from "/@/utils/helper";
 
 import { onMounted, ref, watch } from "vue";
+import ChooseGoodsTagsDialog from "../../components/common/ChooseGoodsTagsDialog.vue";
 
 const emits = defineEmits(["search", "choose-tags"]);
 
@@ -275,6 +287,15 @@ const init = () => {
   }
 };
 
+/**
+ * 标签弹窗
+ */
+let isDialogShow = ref(false);
+// 打开标签选择窗口
+const openTagDialog = () => {
+  isDialogShow.value = true;
+};
+
 watch(isExpand, (value) => {
   const nodeList = document.querySelectorAll(".item-exceed");
   for (let i = 0; i < nodeList.length; i++) {
@@ -371,9 +392,10 @@ onMounted(() => {
         display: inline-flex;
         align-items: center;
         justify-content: space-between;
-        padding: 4px 11px;
+        padding: 4px;
         height: 32px;
-        width: 100%;
+        // width: 100%;
+        width: calc(100% - 118px);
         box-sizing: border-box;
         background-color: var(--el-input-bg-color, var(--el-fill-color-blank));
         background-image: none;
@@ -384,6 +406,31 @@ onMounted(() => {
         transition: var(--el-transition-box-shadow);
         box-shadow: 0 0 0 1px
           var(--el-input-border-color, var(--el-border-color)) inset;
+        .tag-box {
+          flex: 1;
+          display: flex;
+          overflow: hidden;
+          .tag-item {
+            background: #e1eefd;
+            border-radius: 2px;
+            font-size: 13px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #318cf9;
+            flex-shrink: 0;
+            margin-right: 4px;
+            padding: 6px 8px;
+            display: flex;
+            align-items: center;
+            .tag-close {
+              cursor: pointer;
+            }
+          }
+          .tag-more {
+            @extend .tag-item;
+            cursor: pointer;
+          }
+        }
       }
       .range-input {
         display: inline-flex;

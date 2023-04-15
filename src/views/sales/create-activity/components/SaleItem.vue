@@ -53,7 +53,7 @@ const isChecked = computed({
 /**
  * 选择销售页面
  */
-let isChooseSaleDilaogShow = ref(true);
+let isChooseSaleDilaogShow = ref(false);
 const chooseSale = () => {
   isChooseSaleDilaogShow.value = true;
 };

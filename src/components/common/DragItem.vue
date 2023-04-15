@@ -41,22 +41,18 @@ const props = defineProps({
 
 const drag = (ev) => {
   if (props.type == "drag") {
+    console.log("被拖拽的dom");
+    console.log(ev.target);
     ev.dataTransfer.setData("Text", ev.target.id);
     window.dragDom = ev.target;
   }
 };
 const drop = (ev) => {
-  ev.preventDefault();
-  var data = ev.dataTransfer.getData("Text");
-  ev.target.appendChild(document.getElementById(data));
-  const dragDom = document.querySelector(".draggable");
-  console.log(ev.target);
-  window.dragDom.style.top = ev.target.offsetTop + "px";
-  window.dragDom.style.left = ev.target.offsetLeft + "px";
-  window.dragDom = null;
-};
-const allowDrop = (ev) => {
-  ev.preventDefault();
+  if (ev.target == window.dragDom) return;
+  if (window.dragDom.parentNode !== ev.target.parentNode) {
+    window.dragDom.parentNode.removeChild(window.dragDom);
+    ev.target.appendChild(window.dragDom);
+  }
 };
 const dragover = (ev) => {
   if (props.type == "empty") {
@@ -92,5 +88,6 @@ const dragover = (ev) => {
 }
 .item-empty {
   border: 1px dashed rgb(221, 221, 221);
+  position: relative;
 }
 </style>
