@@ -508,12 +508,12 @@ onMounted(() => {
     top: 55px;
     width: 15px;
     height: 15px;
-    cursor: pointer;
     img {
       width: 15px;
       height: 15px;
       transition: all 0.3 ease;
       transition: all 0.5s;
+      cursor: pointer;
     }
     .extends {
       transform: rotateX(180deg);
