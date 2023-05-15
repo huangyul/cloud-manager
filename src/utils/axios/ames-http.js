@@ -50,7 +50,7 @@ axiosInstance.interceptors.response.use(
 
 export const amesFetch = ({ url, data, page = 1, pageSize = 20 }) => {
   return axiosInstance({
-    url: url,
+    url,
     data: {
       ResultSerialize: false,
       ParamDict: data,

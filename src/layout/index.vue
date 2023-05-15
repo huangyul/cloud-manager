@@ -4,7 +4,15 @@
     <div class="container">
       <Aside class="aside"></Aside>
       <div class="content">
-        <RouterView :includes="aliveRoutes"></RouterView>
+        <!-- <RouterView :includes="aliveRoutes"></RouterView> -->
+
+        <RouterView v-slot="{ Component }">
+          <transition>
+            <KeepAlive>
+              <component :is="Component" />
+            </KeepAlive>
+          </transition>
+        </RouterView>
       </div>
     </div>
   </div>
@@ -35,9 +43,12 @@ const aliveRoutes = computed(() => {
     width: 90px;
   }
   .content {
+    overflow: auto;
     flex: 1;
     height: calc(100vh - 40px);
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 40px;
   }
 }
 </style>

@@ -94,7 +94,7 @@
     </div>
     <div class="more">
       <img
-        src="/@/assets/images/common/extends.png"
+        src="/images/common/extends.png"
         @click="onExpand"
         v-if="isExceed"
         :class="{ extends: isExpand }"
@@ -278,12 +278,39 @@ const init = () => {
     document.querySelector(".search-list").appendChild(oFunc);
     oFunc.className = "func item-1 search-item";
   }
+  document.querySelector(".search-list").style.height =
+    height > 41 * props.columnss ? "auto" : "80px";
+
   // 获取所有item距离父元素的高度，判断如果大于两行，则隐藏
-  const searchItemList = document.querySelectorAll(".search-item");
-  for (let i = 0; i < searchItemList.length; i++) {
-    if (searchItemList[i].offsetTop > props.columns * 41) {
-      searchItemList[i].classList.add("item-exceed");
-    }
+  // const searchItemList = document.querySelectorAll('.search-item')
+  // for (let i = 0; i < searchItemList.length; i++) {
+  //   if (searchItemList[i].offsetTop > props.columns * 41) {
+  //     searchItemList[i].classList.add('item-exceed')
+  //   }
+  // }
+};
+
+// 重设控件的宽度
+const resetItemSize = () => {
+  const elements1 = document.querySelectorAll(".item-1");
+  const elements2 = document.querySelectorAll(".item-2");
+  let width1 = "";
+  let width2 = "";
+  if (window.innerWidth <= 1200) {
+    width1 = "50%";
+    width2 = "100%";
+  } else if (window.innerWidth <= 1500) {
+    width1 = "33%";
+    width2 = "50%";
+  } else {
+    width1 = "25%";
+    width2 = "50%";
+  }
+  for (let i = 0; i < elements1.length; i++) {
+    elements1[i].style.width = width1;
+  }
+  for (let i = 0; i < elements2.length; i++) {
+    elements2[i].style.width = width2;
   }
 };
 
@@ -297,18 +324,23 @@ const openTagDialog = () => {
 };
 
 watch(isExpand, (value) => {
-  const nodeList = document.querySelectorAll(".item-exceed");
-  for (let i = 0; i < nodeList.length; i++) {
-    nodeList[i].style.display = value ? "flex" : "none";
-  }
+  // const nodeList = document.querySelectorAll('.item-exceed')
+  // for (let i = 0; i < nodeList.length; i++) {
+  //   nodeList[i].style.display = value ? 'flex' : 'none'
+  // }
+  document.querySelector(".search-list").style.height = value ? "auto" : "80px";
 });
 
 onMounted(() => {
   // 自己保留一份searchList
   // ownSearchList.value = Object.assign({}, props.searchList)
   // 初始化搜索
+  resetItemSize();
   doSearch();
   init();
+  window.onresize = () => {
+    resetItemSize();
+  };
 });
 </script>
 
@@ -319,6 +351,7 @@ onMounted(() => {
   margin-bottom: 16px;
   .search-com {
     .search-list {
+      overflow: hidden;
       ::v-deep .el-form-item__label {
         font-size: 14px;
         font-family: Microsoft YaHei;

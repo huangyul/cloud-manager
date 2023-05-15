@@ -12,3 +12,14 @@ export function getToken() {
     },
   });
 }
+
+// 获取门店列表页
+export function getStoreList() {
+  return amesFetch({
+    url: "/AemsStore/GetStoreList",
+    data: {
+      orgType: 1, // 1-只查询门店，2-所有组织
+      containAllStore: 0, // 1-包含所有组织，0-排除独立门店
+    },
+  });
+}

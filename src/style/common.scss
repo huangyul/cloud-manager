@@ -89,6 +89,11 @@
   }
 }
 .table {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  flex: 1;
+  height: 500px;
   // ele表格样式调整
   th.el-table__cell {
     background: #ebeced !important;
@@ -115,10 +120,17 @@
     background: #fef9ea;
   }
   .page {
+    background: #ffffff;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding-right: 25px;
     margin-top: 6px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    left: 90px;
+    z-index: 2;
   }
 }
 

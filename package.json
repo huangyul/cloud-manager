@@ -8,7 +8,7 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
-    "commit": "git add . && git czg"
+    "commit": "git add . && git cz"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
