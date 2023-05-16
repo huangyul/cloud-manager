@@ -514,6 +514,7 @@ onMounted(() => {
       transition: all 0.3 ease;
       transition: all 0.5s;
       cursor: pointer;
+      user-select: none;
     }
     .extends {
       transform: rotateX(180deg);
