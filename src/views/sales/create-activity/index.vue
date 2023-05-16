@@ -22,5 +22,3 @@ provide("created", {
   <List v-if="pageType == 'list'"></List>
   <Edit v-if="pageType == 'edit'" @go-back="setList"></Edit>
 </template>
-
-<style lang="scss" scoped></style>

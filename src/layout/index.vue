@@ -4,8 +4,6 @@
     <div class="container">
       <Aside class="aside"></Aside>
       <div class="content">
-        <!-- <RouterView :includes="aliveRoutes"></RouterView> -->
-
         <RouterView v-slot="{ Component }">
           <transition>
             <KeepAlive>
@@ -48,7 +46,6 @@ const aliveRoutes = computed(() => {
     height: calc(100vh - 40px);
     display: flex;
     flex-direction: column;
-    padding-bottom: 40px;
   }
 }
 </style>
