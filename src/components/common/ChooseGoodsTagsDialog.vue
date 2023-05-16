@@ -20,13 +20,17 @@
       <div class="pt11 pb11 pr20 pl20 flex-row-between">
         <div class="left mr16">
           <div class="search">
-            <input
-              class="input"
-              type="text"
-              placeholder="搜索标签"
-              v-model="key"
-              @change="handleInputChange"
-            /><span class="tips ml19">（请选择标签，可多选） </span>
+            <span class="tips">请选择商品标签，可多选</span>
+            <div class="input-box">
+              <input
+                class="input"
+                type="text"
+                placeholder="搜索"
+                v-model="key"
+                @change="handleInputChange"
+              />
+              <el-icon><Search /></el-icon>
+            </div>
           </div>
           <div class="content">
             <el-scrollbar height="408px" v-if="tagListShow.length > 0">
@@ -316,21 +320,36 @@ onMounted(() => {
 .left {
   width: 604px;
   .search {
-    .input {
-      width: 208px;
-      height: 32px;
-      background: #ffffff;
-      border: 1px solid #d8d8d8;
-      border-radius: 4px;
-      outline: none;
-      font-size: 14px;
-      padding: 0 9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .input-box {
+      position: relative;
+      .input {
+        width: 208px;
+        height: 32px;
+        background: #ffffff;
+        border: 1px solid #d8d8d8;
+        border-radius: 4px;
+        outline: none;
+        font-size: 14px;
+        padding: 0 9px;
+        padding-right: 30px;
+      }
+
+      .el-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
     }
+
     .tips {
-      font-size: 13px;
+      font-size: 15px;
       font-family: Microsoft YaHei;
-      font-weight: 400;
-      color: #97999c;
+      font-weight: bold;
+      color: #696c70;
     }
     input::input-placeholder {
       color: #97999c;
