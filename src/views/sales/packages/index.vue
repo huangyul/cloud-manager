@@ -16,9 +16,10 @@
 		class="mt8"
 	></MySearch>
 
-	<div class="table m16">
+	<div class="table p-2">
 		<!-- 明细表格 -->
 		<el-table
+			style="width: 100%"
 			:data="tableData"
 			border
 			@sort-change="sortChange"
@@ -147,7 +148,7 @@ let searchOptions = ref({
 })
 // 获取搜索条件
 const getSearchCondition = (value) => {
-	console.log(value)
+	searchCondition.value = value
 }
 // 重置搜索
 const handleSearchReset = (value) => {
@@ -192,6 +193,20 @@ const init = async () => {
 		ParamDict: {
 			Category: 1,
 		},
+	})
+	searchOptions.value.PromotionDataStatus = []
+	searchOptions.value.PromotionAddinID = []
+	res.PromotionAddins.forEach((i) => {
+		searchOptions.value.PromotionAddinID.push({
+			value: i.ID,
+			label: i.Name,
+		})
+	})
+	Object.entries(res.StatusDesc).forEach(([key, value]) => {
+		searchOptions.value.PromotionDataStatus.push({
+			value: key,
+			label: value,
+		})
 	})
 	// TODO
 	doSearch()
