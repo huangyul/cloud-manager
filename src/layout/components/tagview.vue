@@ -53,7 +53,6 @@ const handleCloseTab = (item) => {
   );
   // 如果是关掉当前的页面
   if (item.path == route.path) {
-    console.log(index, tabStore.tabList);
     if (tabStore.tabList.length === 0) {
       router.replace("/");
     } else if (index + 1 >= tabStore.tabList.length) {
