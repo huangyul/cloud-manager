@@ -1,6 +1,7 @@
 /* 云后台接口 */
 import axios from "axios";
 import { ElMessage } from "element-plus";
+import { useUserStore } from "../../store/modules/user";
 import completeConfig from "../generate-http-sign";
 
 const axiosInstance = axios.create({
@@ -14,6 +15,8 @@ const whiteApi = ["/Token/GetToken"];
 // 添加请求拦截器
 axiosInstance.interceptors.request.use(
   function (config) {
+    const userStore = useUserStore();
+    userStore.isAction = true;
     if (!whiteApi.includes(config.url)) {
       config = completeConfig(config);
     }

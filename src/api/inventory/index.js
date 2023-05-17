@@ -1,5 +1,5 @@
 /* 库存管理 */
-import instance from "/@/utils/request";
+import http from "/@/utils/request";
 
 /**
  * 库存管理接口，接口文档地址：http://192.168.16.5:3005/#/zh-cn/saasbusiness/ApiDescription/inventory
@@ -11,7 +11,7 @@ import instance from "/@/utils/request";
  * @returns
  */
 export function generateOrderNum(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/createbillno",
     method: "post",
     data,
@@ -24,7 +24,7 @@ export function generateOrderNum(data) {
  * @returns
  */
 export function getItems(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/getitems",
     method: "post",
     data,
@@ -37,7 +37,7 @@ export function getItems(data) {
  * @returns
  */
 export function deleteOrder(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/delete",
     method: "post",
     data,
@@ -50,7 +50,7 @@ export function deleteOrder(data) {
  * @returns
  */
 export function getTranTypeByBillType(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/gettrantype",
     method: "post",
     data,
@@ -65,7 +65,7 @@ export function getTranTypeByBillType(data) {
  * @returns
  */
 export function getInbouneOrderList(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/queryin",
     method: "post",
     data,
@@ -78,7 +78,7 @@ export function getInbouneOrderList(data) {
  * @returns
  */
 export function submitInboune(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/submitin",
     method: "post",
     data,
@@ -91,7 +91,7 @@ export function submitInboune(data) {
  * @returns
  */
 export function fetchInbouneDetailByID(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/getinbyid",
     method: "post",
     data,
@@ -104,7 +104,7 @@ export function fetchInbouneDetailByID(data) {
  * @returns
  */
 export function createInboune(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/createin",
     method: "post",
     data,
@@ -117,7 +117,7 @@ export function createInboune(data) {
  * @returns
  */
 export function updateInboune(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/modifyin",
     method: "post",
     data,
@@ -132,7 +132,7 @@ export function updateInboune(data) {
  * @returns
  */
 export function createOutboune(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/createout",
     method: "post",
     data,
@@ -145,7 +145,7 @@ export function createOutboune(data) {
  * @returns
  */
 export function getOutbouneOrderList(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/queryout",
     method: "post",
     data,
@@ -158,7 +158,7 @@ export function getOutbouneOrderList(data) {
  * @returns
  */
 export function submitOutboune(data) {
-  return instance({
+  return http({
     url: "dsc/inventoryapi/stockbillapi/submitout",
     method: "post",
     data,
@@ -171,7 +171,7 @@ export function submitOutboune(data) {
  * @returns
  */
 export function fetchOutbouneDetailByID(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/getoutbyid",
     method: "post",
     data,
@@ -184,7 +184,7 @@ export function fetchOutbouneDetailByID(data) {
  * @returns
  */
 export function updateOutboune(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/modifyout",
     method: "post",
     data,
@@ -199,7 +199,7 @@ export function updateOutboune(data) {
  * @returns
  */
 export function createTransferboune(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/createtransfer",
     method: "post",
     data,
@@ -212,7 +212,7 @@ export function createTransferboune(data) {
  * @returns
  */
 export function getTransferbouneOrderList(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/querytransfer",
     method: "post",
     data,
@@ -225,7 +225,7 @@ export function getTransferbouneOrderList(data) {
  * @returns
  */
 export function submitTransferboune(data) {
-  return instance({
+  return http({
     url: "dsc/inventoryapi/stockbillapi/submittransfer",
     method: "post",
     data,
@@ -238,7 +238,7 @@ export function submitTransferboune(data) {
  * @returns
  */
 export function fetchTransferbouneDetailByID(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/gettransferbyid",
     method: "post",
     data,
@@ -251,7 +251,7 @@ export function fetchTransferbouneDetailByID(data) {
  * @returns
  */
 export function updateTransferboune(data) {
-  return instance({
+  return http({
     url: "/dsc/inventoryapi/stockbillapi/modifytransfer",
     method: "post",
     data,

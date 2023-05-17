@@ -192,16 +192,22 @@ const doSearch = () => {
       ownSearchList.value[key].type == "datetimerange"
     ) {
       if (props.dealTime == "two") {
-        if (ownSearchList.value[key].value) {
-          search[`${key}_start`] = new Date(ownSearchList.value[key].value[0])
+        let format = search.format ? search.format : "$$Time";
+        let tags = ["Start", "End"];
+        if (ownSearchList.value[key].value.length > 0) {
+          search[`${format.replace(/\$[^$]*\$/g, tags[0])}`] = new Date(
+            ownSearchList.value[key].value[0]
+          )
             .toLocaleDateString()
-            .replaceAll("/", "-");
-          search[`${key}_end`] = new Date(ownSearchList.value[key].value[1])
+            .replace(/\//g, "-");
+          search[`${format.replace(/\$[^$]*\$/g, tags[1])}`] = new Date(
+            ownSearchList.value[key].value[1]
+          )
             .toLocaleDateString()
-            .replaceAll("/", "-");
+            .replace(/\//g, "-");
         } else {
-          search[`${key}_start`] = "";
-          search[`${key}_end`] = "";
+          search[`${format.replace(/\$[^$]*\$/g, tags[0])}`] = "";
+          search[`${format.replace(/\$[^$]*\$/g, tags[1])}`] = "";
         }
       } else if (props.dealTime == "one") {
         if (ownSearchList.value[key].value) {

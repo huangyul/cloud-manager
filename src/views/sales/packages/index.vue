@@ -96,6 +96,7 @@ import MySearch from "/@/components/common/MySearch.vue";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { getStoreList } from "../../../api/basic";
+import { getSalePackageList } from "../../../api/sales";
 
 const router = useRouter();
 
@@ -116,6 +117,8 @@ const searchList = ref({
     value: [],
     label: "时间",
     placeholder: " ",
+    format: "$Tag$Time",
+    tags: ["Start", "End"],
   },
   PromotionDataStatus: {
     type: "select",
@@ -146,7 +149,9 @@ let searchOptions = ref({
   PromotionAddinID: [],
 });
 // 获取搜索条件
-const getSearchCondition = (value) => {};
+const getSearchCondition = (value) => {
+  console.log(value);
+};
 
 // 表格数据
 let tableData = ref([
@@ -196,8 +201,31 @@ const openDialog = () => {
   router.push({ name: "createActivity" });
 };
 
+const doSearch = async () => {
+  await getSalePackageList({
+    ParamDict: {
+      Category: 1,
+      Name: "测试",
+      Code: "",
+      StartTime: "2022-8-1",
+      EndTime: "2023-01-01",
+      PromotionDataStatus: "UpShelve",
+      LabelList: "",
+      PromotionAddinID: "de8820b3-962d-4c03-b6f5-ddb54b9482e4",
+    },
+    PageSetting: {
+      page_num: 1,
+      page_size: 10,
+    },
+    SortFields: {
+      Name: 1,
+    },
+  });
+};
+
 onMounted(() => {
   getStoreList();
+  doSearch();
 });
 </script>
 

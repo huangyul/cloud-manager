@@ -2,7 +2,7 @@ import axios from "axios";
 import { ElMessage, ElLoading } from "element-plus";
 
 const instance = axios.create({
-  timeout: 6000,
+  timeout: 10000,
   baseURL: process.env.NODE_ENV == "development" ? "/api" : "/front",
 });
 

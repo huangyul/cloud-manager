@@ -1,8 +1,8 @@
-import instance from "/@/utils/request";
+import http from "/@/utils/request";
 
 // 会员档案查询-明细
 export function getMemberArchivesByDetails(data) {
-  return instance({
+  return http({
     url: "/dsc/Leager/leagerapi/queryleagerinfo",
     method: "post",
     data,
@@ -11,7 +11,7 @@ export function getMemberArchivesByDetails(data) {
 
 // 会员档案查询-会员级别汇总
 export function getMemberArchivesByMember(data) {
-  return instance({
+  return http({
     url: "/dsc/Leager/leagerapi/queryleagsortinfo",
     method: "post",
     data,
@@ -20,7 +20,7 @@ export function getMemberArchivesByMember(data) {
 
 // 根据手机号/openId/证件号等获取会员详情
 export function getMemberDetailByOther(data) {
-  return instance({
+  return http({
     url: "/dsc/Leager/leagerapi/find",
     method: "post",
     data,
@@ -29,7 +29,7 @@ export function getMemberDetailByOther(data) {
 
 // 获取会员详情信息
 export function getMemberDetail(data) {
-  return instance({
+  return http({
     url: "/dsc/Leager/leagerapi/getbyid",
     method: "post",
     params: data,
@@ -38,7 +38,7 @@ export function getMemberDetail(data) {
 
 // 获取会员详情-会员余额
 export function getMemberBalance(data) {
-  return instance({
+  return http({
     url: "/dsc/Leager/leagerapi/allbalance",
     method: "post",
     params: data,
@@ -47,7 +47,7 @@ export function getMemberBalance(data) {
 
 // 会员详情-查询订单
 export function getMemberOrder(data) {
-  return instance({
+  return http({
     url: "/dsc/OrderApi/queryapi/queryordersummarylist",
     method: "post",
     data,
@@ -56,7 +56,7 @@ export function getMemberOrder(data) {
 
 // 回收排行列表
 export function getRecoveryData(data) {
-  return instance({
+  return http({
     url: "/dsc/OrderApi/rankingapi/getcloudrecoveryrankingdata",
     method: "post",
     data,
@@ -65,7 +65,7 @@ export function getRecoveryData(data) {
 
 // 兑换排行列表
 export function getExchangeData(data) {
-  return instance({
+  return http({
     url: "/dsc/OrderApi/rankingapi/getcloudexchangerankingdata",
     method: "post",
     data,
