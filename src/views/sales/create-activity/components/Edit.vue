@@ -1,372 +1,386 @@
 <!-- 新建活动-编辑 -->
 <script setup>
-import { onMounted, ref } from "vue";
-import WangEdit from "../../../../components/common/WangEdit.vue";
-import SaleItem from "./SaleItem.vue";
-import Steps from "./Steps.vue";
-import UploadImg from "./UploadImg.vue";
-import { debounce } from "/@/utils/helper.js";
-import ChooseShopDialog from "/@/components/common/ChooseShopDialog.vue";
-const radio1 = ref("");
+import { onMounted, ref } from 'vue'
+import WangEdit from '../../../../components/common/WangEdit.vue'
+import SaleItem from './SaleItem.vue'
+import Steps from './Steps.vue'
+import UploadImg from './UploadImg.vue'
+import { debounce } from '/@/utils/helper.js'
+import ChooseShopDialog from '/@/components/common/ChooseShopDialog.vue'
+import { beforeCreatePackage } from '../../../../api/sales'
+const radio1 = ref('')
 
-const emits = defineEmits(["go-back"]);
+const emits = defineEmits(['go-back'])
 
 // TODO 销售渠道 测试数据
 const fakeData = ref([
-  {
-    title: "门店",
-    isSelectBtn: false,
-    value: "",
-    isCheck: true,
-    label: "",
-    label: "销售页面",
-  },
-  {
-    title: "微官网/微信小程序",
-    isSelectBtn: true,
-    value: "",
-    isCheck: false,
-    label: "",
-    label: "销售页面",
-  },
-]);
+	{
+		title: '门店',
+		isSelectBtn: false,
+		value: '',
+		isCheck: true,
+		label: '',
+		label: '销售页面',
+	},
+	{
+		title: '微官网/微信小程序',
+		isSelectBtn: true,
+		value: '',
+		isCheck: false,
+		label: '',
+		label: '销售页面',
+	},
+])
 
 const isExpand = ref({
-  baseInfo: true,
-  activityDetail: true,
-  salesChannel: true,
-  other: true,
-});
+	baseInfo: true,
+	activityDetail: true,
+	salesChannel: true,
+	other: true,
+})
 
 const handleExpand = (type) => {
-  isExpand.value[type] = !isExpand.value[type];
-};
+	isExpand.value[type] = !isExpand.value[type]
+}
 
-const formBoxRef = ref(null);
-const baseInfoRef = ref(null);
-const activityDetailRef = ref(null);
-const salesChannelRef = ref(null);
-const otherRef = ref(null);
-const stepRef = ref(null);
+const formBoxRef = ref(null)
+const baseInfoRef = ref(null)
+const activityDetailRef = ref(null)
+const salesChannelRef = ref(null)
+const otherRef = ref(null)
+const stepRef = ref(null)
 const handleStepChange = debounce(() => {
-  const top = formBoxRef.value.scrollTop;
-  const sections = [
-    { id: "baseInfo", ref: baseInfoRef.value },
-    { id: "activityDetail", ref: activityDetailRef.value },
-    { id: "salesChannel", ref: salesChannelRef.value },
-    { id: "other", ref: otherRef.value },
-  ];
-  sections.forEach((section) => {
-    if (
-      section.ref.offsetTop - top >= 70 &&
-      section.ref.offsetTop - top <= 180
-    ) {
-      stepRef.value.changeCur(section.id);
-    }
-  });
-}, 100);
+	const top = formBoxRef.value.scrollTop
+	const sections = [
+		{ id: 'baseInfo', ref: baseInfoRef.value },
+		{ id: 'activityDetail', ref: activityDetailRef.value },
+		{ id: 'salesChannel', ref: salesChannelRef.value },
+		{ id: 'other', ref: otherRef.value },
+	]
+	sections.forEach((section) => {
+		if (
+			section.ref.offsetTop - top >= 70 &&
+			section.ref.offsetTop - top <= 180
+		) {
+			stepRef.value.changeCur(section.id)
+		}
+	})
+}, 100)
 
 /**
  * 选择门店
  */
-let isChooseShopDialogShow = ref(false);
+let isChooseShopDialogShow = ref(false)
+
+const init = async () => {
+	await beforeCreatePackage({})
+}
 
 onMounted(() => {
-  formBoxRef.value.addEventListener("scroll", handleStepChange);
-});
+	formBoxRef.value.addEventListener('scroll', handleStepChange)
+
+	init()
+})
 </script>
 
 <template>
-  <div class="box">
-    <div class="header">
-      <div class="flex">
-        <el-icon
-          style="color: #4996f3; cursor: pointer"
-          @click="emits('go-back')"
-        >
-          <ArrowLeftBold />
-        </el-icon>
-        <span class="header-name">创建 - 代币入会套餐</span>
-        <Steps ref="stepRef"></Steps>
-      </div>
-      <div class="flex">
-        <div class="btn btn-grey mr10">关闭</div>
-        <div class="btn btn-blue mr10">保存</div>
-        <div class="btn btn-blue">保存并新增</div>
-      </div>
-    </div>
+	<div class="box">
+		<div class="header">
+			<div class="flex">
+				<el-icon
+					style="color: #4996f3; cursor: pointer"
+					@click="emits('go-back')"
+				>
+					<ArrowLeftBold />
+				</el-icon>
+				<span class="header-name">创建 - 代币入会套餐</span>
+				<Steps ref="stepRef"></Steps>
+			</div>
+			<div class="flex">
+				<div class="btn btn-grey mr10">关闭</div>
+				<div class="btn btn-blue mr10">保存</div>
+				<div class="btn btn-blue">保存并新增</div>
+			</div>
+		</div>
 
-    <!-- 表单 -->
-    <div class="form-box" ref="formBoxRef">
-      <!-- 基本信息 -->
-      <div class="form" id="baseInfo" ref="baseInfoRef">
-        <div class="form-title" @click.stop="handleExpand('baseInfo')">
-          基本信息<el-icon
-            ><ArrowDownBold v-show="!isExpand.baseInfo" /><ArrowUpBold
-              v-show="isExpand.baseInfo"
-          /></el-icon>
-        </div>
-        <div class="pt20 pr60 pl20" v-show="isExpand.baseInfo">
-          <div class="form-item">
-            <div class="form-label">活动名称:</div>
-            <div class="form-item-content">
-              <el-input></el-input>
-              <el-checkbox class="ml30" v-model="checked1" label="授权销售" />
-              <el-checkbox
-                class="ml30"
-                v-model="checked1"
-                label="参与活动折扣"
-              />
-              <el-tooltip
-                class="box-item"
-                effect="dark"
-                content="Left Center prompts info"
-                placement="top"
-              >
-                <el-icon><QuestionFilled /></el-icon>
-              </el-tooltip>
-            </div>
-          </div>
-          <div class="form-item mt14">
-            <div class="form-label">活动编号:</div>
-            <div class="form-item-content">
-              <el-input></el-input>
-            </div>
-          </div>
-          <div class="form-item mt14">
-            <div class="form-label">活动时间:</div>
-            <div class="form-item-content">
-              <el-date-picker
-                type="daterange"
-                range-separator="~"
-                start-placeholder="开始时间"
-                end-placeholder="结束时间"
-              />
-            </div>
-          </div>
-          <div class="form-item mt14">
-            <div class="form-label">活动简介:</div>
-            <div class="form-item-content">
-              <el-input type="textarea" :rows="3" resize="none"></el-input>
-            </div>
-          </div>
-          <div class="form-item mt14">
-            <div class="form-label">适用门店:</div>
-            <div class="form-item-content">
-              <div class="btn btn-blue" @click="isChooseShopDialogShow = true">
-                选择门店
-              </div>
-              <div class="btn btn-blue ml10">删除</div>
-              <!-- 表格 -->
-              <div class="table w-100 mt14">
-                <el-table border empty-text="暂无数据">
-                  <el-table-column type="selection"></el-table-column>
-                  <el-table-column label="编号" prop="qty"></el-table-column>
-                  <el-table-column label="名称" prop="goods_name">
-                  </el-table-column>
-                  <el-table-column label="操作">
-                    <template #default>
-                      <div class="btn-blue btn-table">删除</div>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /基本信息 -->
-      <!-- 活动详情 -->
-      <div class="form" id="activityDetail" ref="activityDetailRef">
-        <div class="form-title" @click="handleExpand('activityDetail')">
-          活动详情<el-icon
-            ><ArrowDownBold v-show="!isExpand.activityDetail" /><ArrowUpBold
-              v-show="isExpand.activityDetail"
-          /></el-icon>
-        </div>
-        <div class="pt20 pr60 pl20" v-show="isExpand.activityDetail">
-          <div class="form-item-inline mr40">
-            <div class="form-label">支付金额:</div>
-            <div class="form-item-content">
-              <el-input class="w200">
-                <template #suffix> 元 </template>
-              </el-input>
-            </div>
-          </div>
-          <div class="form-item-inline">
-            <div class="form-label">获得代币:</div>
-            <div class="form-item-content">
-              <el-input class="w200">
-                <template #suffix> 枚 </template>
-              </el-input>
-            </div>
-          </div>
-          <div class="form-item mt14">
-            <div class="form-label">活动对象:</div>
-            <div class="form-item-content">
-              <el-radio-group v-model="radio1">
-                <el-radio label="1" size="large">不限制</el-radio>
-                <el-radio label="2" size="large">仅限会员</el-radio>
-              </el-radio-group>
-              <div class="form-item-box p16">
-                <el-radio-group v-model="radio1">
-                  <el-radio label="1" size="large">不限制</el-radio>
-                </el-radio-group>
-                <div class="br mt5 mb5"></div>
-                <el-radio-group v-model="radio1" class="flex">
-                  <el-radio
-                    style="width: 23%"
-                    size="large"
-                    :label="3"
-                    v-for="i in 9"
-                    >Option A</el-radio
-                  >
-                </el-radio-group>
-              </div>
-            </div>
-          </div>
-          <div class="form-item mt14">
-            <div class="form-label">图片:</div>
-            <div class="form-item-content">
-              <div class="form-item-box p20">
-                <UploadImg></UploadImg>
-              </div>
-            </div>
-          </div>
-          <div class="form-item mt14">
-            <div class="form-label">活动介绍:</div>
-            <div class="form-item-content">
-              <WangEdit></WangEdit>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /活动详情 -->
-      <!-- 销售渠道 -->
-      <div class="form" id="salesChannel" ref="salesChannelRef">
-        <div class="form-title" @click="handleExpand('salesChannel')">
-          销售渠道<el-icon
-            ><ArrowDownBold v-show="!isExpand.salesChannel" /><ArrowUpBold
-              v-show="isExpand.salesChannel"
-          /></el-icon>
-        </div>
-        <div class="pl110 pt20 pb20 pr106" v-show="isExpand.salesChannel">
-          <template v-for="(data, index) in fakeData">
-            <SaleItem v-model:data="fakeData[index]"></SaleItem>
-          </template>
-        </div>
-      </div>
-      <!-- /销售渠道 -->
-      <!-- 其他 -->
-      <div class="form" id="other" ref="otherRef">
-        <div class="form-title" @click="handleExpand('other')">
-          其他<el-icon
-            ><ArrowDownBold v-show="!isExpand.other" /><ArrowUpBold
-              v-show="isExpand.other"
-          /></el-icon>
-        </div>
-        <div class="pt20 pr60 pl20" v-show="isExpand.other">
-          <div class="form-item-inline mr40">
-            <div class="form-label">支付金额:</div>
-            <div class="form-item-content">
-              <el-input class="w200"> </el-input>
-            </div>
-          </div>
-          <div class="form-item-inline mr40">
-            <div class="form-label">其他:</div>
-            <div class="form-item-content">
-              <el-input class="w500"> </el-input>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /其他 -->
-    </div>
+		<!-- 表单 -->
+		<div class="form-box" ref="formBoxRef">
+			<!-- 基本信息 -->
+			<div class="form" id="baseInfo" ref="baseInfoRef">
+				<div class="form-title" @click.stop="handleExpand('baseInfo')">
+					基本信息
+					<el-icon>
+						<ArrowDownBold v-show="!isExpand.baseInfo" />
+						<ArrowUpBold v-show="isExpand.baseInfo" />
+					</el-icon>
+				</div>
+				<div class="pt20 pr60 pl20" v-show="isExpand.baseInfo">
+					<div class="form-item">
+						<div class="form-label">活动名称:</div>
+						<div class="form-item-content">
+							<el-input></el-input>
+							<el-checkbox class="ml30" v-model="checked1" label="授权销售" />
+							<el-checkbox
+								class="ml30"
+								v-model="checked1"
+								label="参与活动折扣"
+							/>
+							<el-tooltip
+								class="box-item"
+								effect="dark"
+								content="Left Center prompts info"
+								placement="top"
+							>
+								<el-icon><QuestionFilled /></el-icon>
+							</el-tooltip>
+						</div>
+					</div>
+					<div class="form-item mt14">
+						<div class="form-label">活动编号:</div>
+						<div class="form-item-content">
+							<el-input></el-input>
+						</div>
+					</div>
+					<div class="form-item mt14">
+						<div class="form-label">活动时间:</div>
+						<div class="form-item-content">
+							<el-date-picker
+								type="daterange"
+								range-separator="~"
+								start-placeholder="开始时间"
+								end-placeholder="结束时间"
+							/>
+						</div>
+					</div>
+					<div class="form-item mt14">
+						<div class="form-label">活动简介:</div>
+						<div class="form-item-content">
+							<el-input type="textarea" :rows="3" resize="none"></el-input>
+						</div>
+					</div>
+					<div class="form-item mt14">
+						<div class="form-label">适用门店:</div>
+						<div class="form-item-content">
+							<div class="btn btn-blue" @click="isChooseShopDialogShow = true">
+								选择门店
+							</div>
+							<div class="btn btn-blue ml10">删除</div>
+							<!-- 表格 -->
+							<div class="table w-100 mt14">
+								<el-table border empty-text="暂无数据">
+									<el-table-column type="selection"></el-table-column>
+									<el-table-column label="编号" prop="qty"></el-table-column>
+									<el-table-column
+										label="名称"
+										prop="goods_name"
+									></el-table-column>
+									<el-table-column label="操作">
+										<template #default>
+											<div class="btn-blue btn-table">删除</div>
+										</template>
+									</el-table-column>
+								</el-table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /基本信息 -->
+			<!-- 活动详情 -->
+			<div class="form" id="activityDetail" ref="activityDetailRef">
+				<div class="form-title" @click="handleExpand('activityDetail')">
+					活动详情
+					<el-icon>
+						<ArrowDownBold v-show="!isExpand.activityDetail" />
+						<ArrowUpBold v-show="isExpand.activityDetail" />
+					</el-icon>
+				</div>
+				<div class="pt20 pr60 pl20" v-show="isExpand.activityDetail">
+					<div class="form-item-inline mr40">
+						<div class="form-label">支付金额:</div>
+						<div class="form-item-content">
+							<el-input class="w200">
+								<template #suffix>元</template>
+							</el-input>
+						</div>
+					</div>
+					<div class="form-item-inline">
+						<div class="form-label">获得代币:</div>
+						<div class="form-item-content">
+							<el-input class="w200">
+								<template #suffix>枚</template>
+							</el-input>
+						</div>
+					</div>
+					<div class="form-item mt14">
+						<div class="form-label">活动对象:</div>
+						<div class="form-item-content">
+							<el-radio-group v-model="radio1">
+								<el-radio label="1" size="large">不限制</el-radio>
+								<el-radio label="2" size="large">仅限会员</el-radio>
+							</el-radio-group>
+							<div class="form-item-box p16">
+								<el-radio-group v-model="radio1">
+									<el-radio label="1" size="large">不限制</el-radio>
+								</el-radio-group>
+								<div class="br mt5 mb5"></div>
+								<el-radio-group v-model="radio1" class="flex">
+									<el-radio
+										style="width: 23%"
+										size="large"
+										:label="3"
+										v-for="i in 9"
+									>
+										Option A
+									</el-radio>
+								</el-radio-group>
+							</div>
+						</div>
+					</div>
+					<div class="form-item mt14">
+						<div class="form-label">图片:</div>
+						<div class="form-item-content">
+							<div class="form-item-box p20">
+								<UploadImg></UploadImg>
+							</div>
+						</div>
+					</div>
+					<div class="form-item mt14">
+						<div class="form-label">活动介绍:</div>
+						<div class="form-item-content">
+							<WangEdit></WangEdit>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /活动详情 -->
+			<!-- 销售渠道 -->
+			<div class="form" id="salesChannel" ref="salesChannelRef">
+				<div class="form-title" @click="handleExpand('salesChannel')">
+					销售渠道
+					<el-icon>
+						<ArrowDownBold v-show="!isExpand.salesChannel" />
+						<ArrowUpBold v-show="isExpand.salesChannel" />
+					</el-icon>
+				</div>
+				<div class="pl110 pt20 pb20 pr106" v-show="isExpand.salesChannel">
+					<template v-for="(data, index) in fakeData">
+						<SaleItem v-model:data="fakeData[index]"></SaleItem>
+					</template>
+				</div>
+			</div>
+			<!-- /销售渠道 -->
+			<!-- 其他 -->
+			<div class="form" id="other" ref="otherRef">
+				<div class="form-title" @click="handleExpand('other')">
+					其他
+					<el-icon>
+						<ArrowDownBold v-show="!isExpand.other" />
+						<ArrowUpBold v-show="isExpand.other" />
+					</el-icon>
+				</div>
+				<div class="pt20 pr60 pl20" v-show="isExpand.other">
+					<div class="form-item-inline mr40">
+						<div class="form-label">支付金额:</div>
+						<div class="form-item-content">
+							<el-input class="w200"></el-input>
+						</div>
+					</div>
+					<div class="form-item-inline mr40">
+						<div class="form-label">其他:</div>
+						<div class="form-item-content">
+							<el-input class="w500"></el-input>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /其他 -->
+		</div>
 
-    <!-- 选择门店弹窗 -->
-    <ChooseShopDialog
-      v-model:isChooseDialogShow="isChooseShopDialogShow"
-    ></ChooseShopDialog>
-  </div>
+		<!-- 选择门店弹窗 -->
+		<ChooseShopDialog
+			v-model:isChooseDialogShow="isChooseShopDialogShow"
+		></ChooseShopDialog>
+	</div>
 </template>
 
 <style lang="scss" scoped>
 * {
-  user-select: none;
+	user-select: none;
 }
 .box {
-  .header {
-    padding: 13px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e6e6e6;
-    .header-name {
-      margin-left: 25px;
-      margin-right: 45px;
-      font-size: 16px;
-      font-family: Microsoft YaHei;
-      font-weight: bold;
-      color: #2f3339;
-    }
-  }
-  .form-box {
-    padding: 20px;
-    height: calc(100vh - 100px);
-    overflow-y: auto;
-    .form {
-      &:not(:first-child) {
-        margin-top: 20px;
-      }
-      .form-title {
-        cursor: pointer;
-        height: 36px;
-        background: rgba($color: #4996f3, $alpha: 0.2);
-        padding: 12px 16px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 14px;
-        font-family: Microsoft YaHei;
-        font-weight: bold;
-        color: #2f3339;
-      }
+	.header {
+		padding: 13px 30px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-bottom: 1px solid #e6e6e6;
+		.header-name {
+			margin-left: 25px;
+			margin-right: 45px;
+			font-size: 16px;
+			font-family: Microsoft YaHei;
+			font-weight: bold;
+			color: #2f3339;
+		}
+	}
+	.form-box {
+		padding: 20px;
+		height: calc(100vh - 100px);
+		overflow-y: auto;
+		.form {
+			&:not(:first-child) {
+				margin-top: 20px;
+			}
+			.form-title {
+				cursor: pointer;
+				height: 36px;
+				background: rgba($color: #4996f3, $alpha: 0.2);
+				padding: 12px 16px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 14px;
+				font-family: Microsoft YaHei;
+				font-weight: bold;
+				color: #2f3339;
+			}
 
-      .form-item {
-        display: flex;
-        align-items: flex-start;
-        .form-label {
-          text-align: right;
-          min-width: 80px;
-          width: 80px;
-          font-size: 14px;
-          font-family: Microsoft YaHei;
-          font-weight: 400;
-          color: #2f3339;
-          line-height: 32px;
-          margin-right: 10px;
-        }
-        .form-item-content {
-          flex: 1;
-          ::v-deep .el-input,
-          ::v-deep .el-date-editor {
-            width: 400px;
-            height: 32px;
-          }
-          ::v-deep .el-textarea {
-            width: 600px;
-          }
-        }
-        .form-item-box {
-          background: #ffffff;
-          border: 1px solid #d8d8d8;
-        }
-      }
-      .form-item-inline {
-        @extend .form-item;
-        display: inline-flex;
-      }
-    }
-  }
+			.form-item {
+				display: flex;
+				align-items: flex-start;
+				.form-label {
+					text-align: right;
+					min-width: 80px;
+					width: 80px;
+					font-size: 14px;
+					font-family: Microsoft YaHei;
+					font-weight: 400;
+					color: #2f3339;
+					line-height: 32px;
+					margin-right: 10px;
+				}
+				.form-item-content {
+					flex: 1;
+					::v-deep .el-input,
+					::v-deep .el-date-editor {
+						width: 400px;
+						height: 32px;
+					}
+					::v-deep .el-textarea {
+						width: 600px;
+					}
+				}
+				.form-item-box {
+					background: #ffffff;
+					border: 1px solid #d8d8d8;
+				}
+			}
+			.form-item-inline {
+				@extend .form-item;
+				display: inline-flex;
+			}
+		}
+	}
 }
 </style>

@@ -149,6 +149,7 @@ let searchOptions = ref({
 // 获取搜索条件
 const getSearchCondition = (value) => {
 	searchCondition.value = value
+	doSearch()
 }
 // 重置搜索
 const handleSearchReset = (value) => {
@@ -160,6 +161,21 @@ let tableData = ref([])
 let pageSize = ref(10)
 let currentPage = ref(1)
 let total = ref(0)
+// 表格排序
+const sortChange = ({ order, prop }) => {
+	if (order == 'ascending') {
+		searchCondition.value.order = {
+			[prop]: 1,
+		}
+	} else if (order == 'descending') {
+		searchCondition.value.order = {
+			[prop]: -1,
+		}
+	} else {
+		searchCondition.value.order = {}
+	}
+	doSearch()
+}
 
 // 创建活动
 const openDialog = () => {
@@ -167,23 +183,18 @@ const openDialog = () => {
 }
 
 const doSearch = async () => {
+	let order = searchCondition.value.order ?? {}
 	await getSalePackageList({
 		ParamDict: {
-			Category: 1,
-			Name: '测试',
-			Code: '',
-			StartTime: '2022-8-1',
-			EndTime: '2023-01-01',
-			PromotionDataStatus: 'UpShelve',
-			LabelList: '',
-			PromotionAddinID: 'de8820b3-962d-4c03-b6f5-ddb54b9482e4',
+			Category: 0, // 套餐是0
+			...searchCondition.value,
 		},
 		PageSetting: {
 			page_num: 1,
 			page_size: 10,
 		},
 		SortFields: {
-			Name: 1,
+			...order,
 		},
 	})
 }

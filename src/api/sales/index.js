@@ -37,3 +37,21 @@ export function deleteSalePackage(data) {
 		data,
 	})
 }
+
+// 获取销售页面及位置
+export function getSalePageData(data = {}) {
+	return http({
+		url: '/AemsPackagePage/QueryIndex',
+		method: 'post',
+		data,
+	})
+}
+
+// 新建套餐时所需的数据
+export function beforeCreatePackage(data = {}) {
+	return http({
+		url: '/AemsPackagePage/InitialeData',
+		method: 'post',
+		data,
+	})
+}

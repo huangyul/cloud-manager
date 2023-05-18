@@ -106,6 +106,7 @@
 
 		<!-- 便签选择弹窗 -->
 		<ChooseGoodsTagsDialog
+			:tagType="props.tagType"
 			v-model:isShow="isDialogShow"
 		></ChooseGoodsTagsDialog>
 	</div>
@@ -166,6 +167,10 @@ const props = defineProps({
 	dealTime: {
 		type: String,
 		default: 'two',
+	},
+	tagType: {
+		type: String,
+		default: 'FrmPromotionData0', // 营销方案: FrmPromotionData1    销售套餐: FrmPromotionData0
 	},
 })
 

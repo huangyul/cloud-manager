@@ -9,7 +9,7 @@ const data = ref({})
 const init = async () => {
 	const res = await getProgrammeTemplateList({
 		ParamDict: {
-			Category: 1, //0-套餐，1-方案，3-加购套餐，9-资产转换
+			Category: 0, //0-套餐，1-方案，3-加购套餐，9-资产转换
 		},
 	})
 	// 使用 reduce() 方法对数组进行分组
