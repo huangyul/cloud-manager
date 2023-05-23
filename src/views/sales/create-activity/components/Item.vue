@@ -16,17 +16,21 @@ const props = defineProps({
 	},
 })
 
+const generateUrl = (url) => {
+	return `/images/sale/Sales_icon/${url}.png`
+}
+
 const { setEdit, setList } = inject('created')
-const handleCreate = () => {
-	setEdit()
+const handleCreate = (id) => {
+	setEdit(id)
 }
 </script>
 
 <template>
 	<div class="box">
-		<img :src="icon" />
+		<img :src="generateUrl(props.data.UrlPath)" />
 		<p class="name">{{ props.data.Name }}</p>
-		<div class="box-btn" @click="handleCreate">立即创建</div>
+		<div class="box-btn" @click="handleCreate(props.data.ID)">立即创建</div>
 	</div>
 </template>
 
@@ -51,6 +55,7 @@ const handleCreate = () => {
 		font-family: Microsoft YaHei;
 		font-weight: bold;
 		color: #2f3339;
+		text-align: center;
 	}
 	.box-btn {
 		width: 120px;

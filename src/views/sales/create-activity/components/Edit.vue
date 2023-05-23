@@ -8,41 +8,29 @@ import UploadImg from './UploadImg.vue'
 import { debounce } from '/@/utils/helper.js'
 import ChooseShopDialog from '/@/components/common/ChooseShopDialog.vue'
 import { beforeCreatePackage } from '../../../../api/sales'
+import { useRouter } from 'vue-router'
 const radio1 = ref('')
+
+const router = useRouter()
 
 const emits = defineEmits(['go-back'])
 
-// TODO 销售渠道 测试数据
-const fakeData = ref([
-	{
-		title: '门店',
-		isSelectBtn: false,
-		value: '',
-		isCheck: true,
-		label: '',
-		label: '销售页面',
-	},
-	{
-		title: '微官网/微信小程序',
-		isSelectBtn: true,
-		value: '',
-		isCheck: false,
-		label: '',
-		label: '销售页面',
-	},
-])
+const props = defineProps({
+	id: String,
+})
 
+// 内容展开
 const isExpand = ref({
 	baseInfo: true,
 	activityDetail: true,
 	salesChannel: true,
 	other: true,
 })
-
 const handleExpand = (type) => {
 	isExpand.value[type] = !isExpand.value[type]
 }
 
+// 描点滚动
 const formBoxRef = ref(null)
 const baseInfoRef = ref(null)
 const activityDetailRef = ref(null)
@@ -72,13 +60,90 @@ const handleStepChange = debounce(() => {
  */
 let isChooseShopDialogShow = ref(false)
 
+// 表单数据
+const data = ref({
+	ID: '',
+	Name: 'minno1',
+	Code: '54T006231',
+	UseDiscount: '1',
+	Remark: '',
+	StartTime: '2023/04/29',
+	EndTime: '3000/01/01 23:59:59',
+	BusinessJson: {
+		Price: '100',
+		CoinNum: '1',
+		memberLevel: ['B'],
+		AuthorizeSale: 0,
+	},
+	ApplyStoreList: [
+		{
+			PromotionDataID: '10001_001',
+			StoreID: '93G257YH0002B00',
+			StoreNo: '001',
+			StoreName: '云管家001店',
+			HandleState: 0,
+			OrganizationID: null,
+			TaskID: null,
+			TaskStatus: null,
+			SourceFlag: 0,
+			ID: '4UJT9J2IU1EG0ZE1ZPM2S1G2Z3S37NRMWSVUS2',
+			CreateTime: '/Date(1682751072387)/',
+			ModifyTime: '/Date(1682751072387)/',
+			ModifyOperatorID: null,
+			DirtyFlag: 0,
+			RowState: 4,
+			Tag: null,
+		},
+	],
+	ReportLabelList: ['3:4UJT7BOIY21S11NHYXQEH6BDR05RSFS8EY3ZX4'],
+	PartnerID: '9E5DJ9KX0002200',
+	ImageData: {
+		MainPic:
+			'/AemsCloudResource/93G24LFI0001700/2023/c6af7162-31c3-49e8-9862-95c27552c07b.png',
+		EnclosurePics: [],
+	},
+	SubTitle: '',
+	AttachInfoHtml: '',
+	PromotionAddinID: 'de8820b3-962d-4c03-b6f5-ddb54b9482e4',
+	Category: 0,
+	PromotionChannel: [
+		{
+			ID: '6C85F90A-75DE-45E7-8F37-F34AEF74CCE3',
+			ProductID: '',
+		},
+	],
+	PromotionPositionInfo: [
+		{
+			PageName: '店长精选',
+			PromotionDataID: '7e41b561-ea6f-40cf-bd0f-9b55e9489e71',
+			PageNo: 'D1',
+			PageID: '93HIV3BJ0001B00',
+			RowIndex: '2',
+			ColIndex: '2',
+			BgColor: 'rgb(45, 100, 194)',
+		},
+	],
+})
+// 保存
+const handleSave = () => {
+	const param = {
+		...data.value,
+	}
+}
+
+// 关闭
+const handleClose = () => {
+	router.back()
+}
+
 const init = async () => {
-	await beforeCreatePackage({})
+	// data.value =
+	await beforeCreatePackage({ AddinID: props.id })
+	// data.value.AllowChannels.forEach((i) => {})
 }
 
 onMounted(() => {
 	formBoxRef.value.addEventListener('scroll', handleStepChange)
-
 	init()
 })
 </script>
@@ -97,8 +162,8 @@ onMounted(() => {
 				<Steps ref="stepRef"></Steps>
 			</div>
 			<div class="flex">
-				<div class="btn btn-grey mr10">关闭</div>
-				<div class="btn btn-blue mr10">保存</div>
+				<div class="btn btn-grey mr10" @click="handleClose">关闭</div>
+				<div class="btn btn-blue mr10" @click="handleSave">保存</div>
 				<div class="btn btn-blue">保存并新增</div>
 			</div>
 		</div>
@@ -118,33 +183,38 @@ onMounted(() => {
 					<div class="form-item">
 						<div class="form-label">活动名称:</div>
 						<div class="form-item-content">
-							<el-input></el-input>
-							<el-checkbox class="ml30" v-model="checked1" label="授权销售" />
+							<el-input v-model="data.Name"></el-input>
 							<el-checkbox
 								class="ml30"
-								v-model="checked1"
+								v-model="data.BusinessJson.AuthorizeSale"
+								label="授权销售"
+							/>
+							<el-checkbox
+								class="ml30"
+								v-model="data.UseDiscount"
 								label="参与活动折扣"
 							/>
-							<el-tooltip
+							<!-- <el-tooltip
 								class="box-item"
 								effect="dark"
 								content="Left Center prompts info"
 								placement="top"
 							>
 								<el-icon><QuestionFilled /></el-icon>
-							</el-tooltip>
+							</el-tooltip> -->
 						</div>
 					</div>
 					<div class="form-item mt14">
 						<div class="form-label">活动编号:</div>
 						<div class="form-item-content">
-							<el-input></el-input>
+							<el-input v-model="data.Code"></el-input>
 						</div>
 					</div>
 					<div class="form-item mt14">
 						<div class="form-label">活动时间:</div>
 						<div class="form-item-content">
 							<el-date-picker
+								v-model="data.StartTime"
 								type="daterange"
 								range-separator="~"
 								start-placeholder="开始时间"
@@ -155,7 +225,12 @@ onMounted(() => {
 					<div class="form-item mt14">
 						<div class="form-label">活动简介:</div>
 						<div class="form-item-content">
-							<el-input type="textarea" :rows="3" resize="none"></el-input>
+							<el-input
+								v-model="data.SubTitle"
+								type="textarea"
+								:rows="3"
+								resize="none"
+							></el-input>
 						</div>
 					</div>
 					<div class="form-item mt14">
@@ -167,7 +242,11 @@ onMounted(() => {
 							<div class="btn btn-blue ml10">删除</div>
 							<!-- 表格 -->
 							<div class="table w-100 mt14">
-								<el-table border empty-text="暂无数据">
+								<el-table
+									:data="data.ApplyStoreList"
+									border
+									empty-text="暂无数据"
+								>
 									<el-table-column type="selection"></el-table-column>
 									<el-table-column label="编号" prop="qty"></el-table-column>
 									<el-table-column
@@ -199,7 +278,7 @@ onMounted(() => {
 					<div class="form-item-inline mr40">
 						<div class="form-label">支付金额:</div>
 						<div class="form-item-content">
-							<el-input class="w200">
+							<el-input v-model="data.BusinessJson.Price" class="w200">
 								<template #suffix>元</template>
 							</el-input>
 						</div>
@@ -207,7 +286,7 @@ onMounted(() => {
 					<div class="form-item-inline">
 						<div class="form-label">获得代币:</div>
 						<div class="form-item-content">
-							<el-input class="w200">
+							<el-input v-model="data.BusinessJson.CoinNum" class="w200">
 								<template #suffix>枚</template>
 							</el-input>
 						</div>
@@ -221,7 +300,7 @@ onMounted(() => {
 							</el-radio-group>
 							<div class="form-item-box p16">
 								<el-radio-group v-model="radio1">
-									<el-radio label="1" size="large">不限制</el-radio>
+									<el-radio label="1" size="large">全部会员</el-radio>
 								</el-radio-group>
 								<div class="br mt5 mb5"></div>
 								<el-radio-group v-model="radio1" class="flex">
@@ -248,7 +327,7 @@ onMounted(() => {
 					<div class="form-item mt14">
 						<div class="form-label">活动介绍:</div>
 						<div class="form-item-content">
-							<WangEdit></WangEdit>
+							<WangEdit v-model:data="data.AttachInfoHtml"></WangEdit>
 						</div>
 					</div>
 				</div>
@@ -264,8 +343,8 @@ onMounted(() => {
 					</el-icon>
 				</div>
 				<div class="pl110 pt20 pb20 pr106" v-show="isExpand.salesChannel">
-					<template v-for="(data, index) in fakeData">
-						<SaleItem v-model:data="fakeData[index]"></SaleItem>
+					<template v-for="(data, index) in data.AllowChannels">
+						<SaleItem v-model:data="data.AllowChannels[index]"></SaleItem>
 					</template>
 				</div>
 			</div>

@@ -27,7 +27,6 @@
 								type="text"
 								placeholder="搜索"
 								v-model="key"
-								@change="handleInputChange"
 							/>
 							<el-icon><Search /></el-icon>
 						</div>
@@ -82,7 +81,7 @@
 			<template #footer>
 				<div class="footer">
 					<button class="btn-grey btn mr12" @click="close">关闭</button>
-					<button class="btn-blue btn">保存</button>
+					<button class="btn-blue btn" @click="onConfirm">保存</button>
 				</div>
 			</template>
 		</el-dialog>
@@ -92,6 +91,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { getTags } from '../../api/basic'
+import { deepClone } from '../../utils/helper'
 const props = defineProps({
 	isShow: {
 		type: Boolean,
@@ -108,7 +108,7 @@ const emits = defineEmits(['update:isShow', 'confirm'])
 const tagList = ref([
 	{
 		name: '用途',
-		id: 1,
+		value: 1,
 		tags: [
 			{ name: '礼品兑换', value: 1 },
 			{ name: '彩票兑换', value: 2 },
@@ -117,7 +117,7 @@ const tagList = ref([
 	},
 	{
 		name: '五一优惠活动',
-		id: 2,
+		value: 2,
 		tags: [
 			{ name: '不用劳动', value: 4 },
 			{ name: '要努力劳动', value: 5 },
@@ -125,7 +125,7 @@ const tagList = ref([
 	},
 	{
 		name: '仓库',
-		id: 3,
+		value: 3,
 		tags: [
 			{ name: '仓库1', value: 6 },
 			{ name: '仓库1', value: 13 },
@@ -155,33 +155,77 @@ const selectedTagNum = computed(() => {
 	return num
 })
 const handleSelectTag = (tag, parent) => {
+	const selectedTagsMap = new Map(selectedTags.value.map((t) => [t.value, t]))
+
 	if (tagMap.value.has(tag.value)) {
 		tagMap.value.delete(tag.value)
-		for (let i = 0; i < selectedTags.value.length; i++) {
-			if (selectedTags.value[i].id == parent.id) {
-				selectedTags.value[i].tags.forEach((value, index, arr) => {
-					if (value.value == tag.value) {
-						arr.splice(index, 1)
-					}
-				})
-				break
+
+		const parentIndex = selectedTags.value.findIndex(
+			(t) => t.value === parent.value,
+		)
+		if (parentIndex !== -1) {
+			const parentTags = selectedTags.value[parentIndex].tags
+			const tagIndex = parentTags.findIndex((t) => t.value === tag.value)
+			if (tagIndex !== -1) {
+				parentTags.splice(tagIndex, 1)
+				if (parentTags.length === 0) {
+					selectedTags.value.splice(parentIndex, 1)
+				}
 			}
 		}
 	} else {
 		tagMap.value.set(tag.value, tag.name)
-		for (let i = 0; i < selectedTags.value.length; i++) {
-			console.log(selectedTags.value[i].id, parent.id)
-			if (selectedTags.value[i].id == parent.id) {
-				selectedTags.value[i].tags.push({ ...tag })
-				console.log(selectedTags.value)
-				break
-			}
+
+		if (selectedTagsMap.has(parent.value)) {
+			selectedTagsMap.get(parent.value).tags.push({ ...tag })
+		} else {
+			selectedTags.value.push({
+				name: parent.name,
+				value: parent.value,
+				tags: [{ ...tag }],
+			})
 		}
 	}
 }
+
+// const handleSelectTag = (tag, parent) => {
+// 	let m = new Map()
+// 	selectedTags.value.forEach((t) => {
+// 		m.set(t.value, t.name)
+// 	})
+// 	if (tagMap.value.has(tag.value)) {
+// 		tagMap.value.delete(tag.value)
+// 		for (let i = 0; i < selectedTags.value.length; i++) {
+// 			if (selectedTags.value[i].value == parent.value) {
+// 				selectedTags.value[i].tags.forEach((value, index, arr) => {
+// 					if (value.value == tag.value) {
+// 						arr.splice(index, 1)
+// 					}
+// 				})
+// 				break
+// 			}
+// 		}
+// 	} else {
+// 		tagMap.value.set(tag.value, tag.name)
+// 		if (m.has(parent.value)) {
+// 			for (let i = 0; i < selectedTags.value.length; i++) {
+// 				if (selectedTags.value[i].value == parent.value) {
+// 					selectedTags.value[i].tags.push({ ...tag })
+// 					break
+// 				}
+// 			}
+// 		} else {
+// 			selectedTags.value.push({
+// 				name: parent.name,
+// 				value: parent.value,
+// 				tags: [tag],
+// 			})
+// 		}
+// 	}
+// }
 const handleClearTags = () => {
 	tagMap.value.clear()
-	selectedTags.value.forEach((i) => (i.tags = []))
+	selectedTags.value = []
 }
 // 表格数据
 let tableData = ref([{ id: 1 }])
@@ -208,22 +252,36 @@ const close = () => {
 
 // 点击确定按钮
 const onConfirm = () => {
-	emits('confirm')
+	const res = selectedTags.value.filter((tag) => tag.tags.length > 0)
+	emits('confirm', res)
+	close()
 }
 
 const init = async () => {
 	await getTags(props.tagType)
 }
 
-onMounted(() => {
-	tagListShow.value = tagList.value
-	tagList.value.forEach((i) => {
-		selectedTags.value.push({
-			name: i.name,
-			id: i.id,
-			tags: [],
+const fillTag = (arr) => {
+	selectedTags.value = deepClone(arr)
+	tagMap.value.clear()
+	selectedTags.value.forEach((t) => {
+		t.tags.forEach((tag) => {
+			tagMap.value.set(tag.value, tag.anme)
 		})
 	})
+}
+
+watch(props.isShow, () => {
+	console.log(123123)
+})
+
+defineExpose({
+	fillTag,
+})
+
+onMounted(() => {
+	tagListShow.value = tagList.value
+	// TODO 处理获取后的数据
 	init()
 })
 </script>

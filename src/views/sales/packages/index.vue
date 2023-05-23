@@ -224,7 +224,6 @@ const init = async () => {
 }
 
 onMounted(() => {
-	getStoreList()
 	init()
 })
 </script>

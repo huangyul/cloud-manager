@@ -14,19 +14,12 @@ export function getToken() {
 }
 
 // 获取门店列表页
-export function getStoreList() {
+export function getStoreList(data, currentPage, pageSize) {
 	return amesFetch({
 		url: '/AemsStore/GetStoreList',
-		data: {
-			ParamDict: {
-				orgType: 1, // 1-只查询门店，2-所有组织
-				containAllStore: 0, // 1-包含所有组织，0-排除独立门店
-			},
-			PageSetting: {
-				page_num: 1,
-				page_size: 100,
-			},
-		},
+		data,
+		currentPage,
+		pageSize,
 	})
 }
 
@@ -44,9 +37,8 @@ export function getTags(type) {
 			// },
 
 			ParamDict: {
-				Type: 'FrmPromotionData1',
-				SelectLabelValuesString:
-					'4U9AGPT4U7C6115K2G90P50A50P6WH8G4VQ08P,4U9AGAL76TPS16ZD0M1WFRBR909UZ3O0LW372J',
+				Type: 'FrmPromotionData0',
+				SelectLabelValuesString: '',
 			},
 		},
 	})

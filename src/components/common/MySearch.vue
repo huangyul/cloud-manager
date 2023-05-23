@@ -69,11 +69,32 @@
 					<!-- 标签选择 -->
 					<div v-if="value.type == 'select-tag'" class="item-input">
 						<div class="tag-box">
-							<div class="tag-item" v-for="i in 2">
-								标签名称：标签值
-								<el-icon class="tag-close"><Close /></el-icon>
+							<template v-for="(tagCat, index) in tagList">
+								<div class="tag-item" v-if="index < 2" :key="tagCat.value">
+									{{ tagCat.name }}：
+									<span
+										class="flex items-center pl-1"
+										v-for="tag in tagCat.tags"
+										:key="tag.value"
+									>
+										{{ tag.name }}
+										<el-icon
+											class="tag-close"
+											@click="handleCloseTag(tagCat, tag)"
+										>
+											<Close />
+										</el-icon>
+									</span>
+								</div>
+							</template>
+
+							<div
+								class="tag-more"
+								@click="openTagDialog"
+								v-if="tagList.length > 2"
+							>
+								+ {{ tagList.length - 2 }}
 							</div>
-							<div class="tag-more" @click="openTagDialog">+ 2</div>
 						</div>
 						<div class="tag-btn" @click="openTagDialog">选择</div>
 					</div>
@@ -106,8 +127,10 @@
 
 		<!-- 便签选择弹窗 -->
 		<ChooseGoodsTagsDialog
+			ref="tagRef"
 			:tagType="props.tagType"
 			v-model:isShow="isDialogShow"
+			@confirm="handleTagConfirm"
 		></ChooseGoodsTagsDialog>
 	</div>
 </template>
@@ -333,9 +356,26 @@ const resetItemSize = () => {
  * 标签弹窗
  */
 let isDialogShow = ref(false)
+const tagList = ref([])
 // 打开标签选择窗口
+const tagRef = ref()
 const openTagDialog = () => {
 	isDialogShow.value = true
+	tagRef.value.fillTag(tagList.value)
+}
+const handleTagConfirm = (value) => {
+	tagList.value = deepClone(value)
+}
+const handleCloseTag = (pTag, cTag) => {
+	tagList.value.forEach((tag) => {
+		if (tag.value == pTag.value) {
+			tag.tags.splice(
+				tag.tags.findIndex((i) => i.value == cTag.value),
+				1,
+			)
+		}
+	})
+	tagList.value = tagList.value.filter((i) => i.tags.length > 0)
 }
 
 watch(isExpand, (value) => {

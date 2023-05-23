@@ -1,4 +1,4 @@
-import http from '/@/utils/axios/ames-http'
+import http, { amesFetch } from '/@/utils/axios/ames-http'
 
 /* 销售模块接口 */
 
@@ -49,8 +49,8 @@ export function getSalePageData(data = {}) {
 
 // 新建套餐时所需的数据
 export function beforeCreatePackage(data = {}) {
-	return http({
-		url: '/AemsPackagePage/InitialeData',
+	return amesFetch({
+		url: '/AemsPackagePage/InitializeData',
 		method: 'post',
 		data,
 	})
