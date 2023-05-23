@@ -26,3 +26,26 @@ export async function useToken() {
 	localStorage.setItem('token', res.TokenId)
 	return
 }
+
+export function useTabs() {
+	const tabStore = useMultipleTabStore()
+	const router = useRouter()
+
+	const handleCloseTab = (route, currentRoute) => {
+		tabStore.tabList = tabStore.tabList.filter((t) => t.name != route.name)
+
+		if (route.path == currentRoute.path) {
+			if (tabStore.tabList.length === 0) {
+				router.replace('/')
+			} else if (index + 1 >= tabStore.tabList.length) {
+				router.replace(tabStore.tabList[index - 1 >= 0 ? index - 1 : 0].path)
+			} else {
+				router.replace(tabStore.tabList[index].path)
+			}
+		}
+	}
+
+	return {
+		handleCloseTab,
+	}
+}

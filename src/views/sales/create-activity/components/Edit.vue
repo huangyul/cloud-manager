@@ -8,10 +8,10 @@ import UploadImg from './UploadImg.vue'
 import { debounce } from '/@/utils/helper.js'
 import ChooseShopDialog from '/@/components/common/ChooseShopDialog.vue'
 import { beforeCreatePackage } from '../../../../api/sales'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useTabs } from '../../../../hooks/basic'
+import { useMultipleTabStore } from '/@/store/modules/multipleTab'
 const radio1 = ref('')
-
-const router = useRouter()
 
 const emits = defineEmits(['go-back'])
 
@@ -131,9 +131,19 @@ const handleSave = () => {
 	}
 }
 
+const route = useRoute()
+const router = useRouter()
+const tabStore = useMultipleTabStore()
+
 // 关闭
 const handleClose = () => {
-	router.back()
+	tabStore.tabList = tabStore.tabList.filter((t) => t.path != route.path)
+	const len = tabStore.tabList.length
+	if (len == 0) {
+		router.replace('/')
+	} else {
+		router.replace(tabStore.tabList[len - 1].path)
+	}
 }
 
 const init = async () => {
@@ -387,6 +397,7 @@ onMounted(() => {
 * {
 	user-select: none;
 }
+
 .box {
 	.header {
 		padding: 13px 30px;
@@ -394,6 +405,7 @@ onMounted(() => {
 		justify-content: space-between;
 		align-items: center;
 		border-bottom: 1px solid #e6e6e6;
+
 		.header-name {
 			margin-left: 25px;
 			margin-right: 45px;
@@ -403,14 +415,17 @@ onMounted(() => {
 			color: #2f3339;
 		}
 	}
+
 	.form-box {
 		padding: 20px;
 		height: calc(100vh - 100px);
 		overflow-y: auto;
+
 		.form {
 			&:not(:first-child) {
 				margin-top: 20px;
 			}
+
 			.form-title {
 				cursor: pointer;
 				height: 36px;
@@ -428,6 +443,7 @@ onMounted(() => {
 			.form-item {
 				display: flex;
 				align-items: flex-start;
+
 				.form-label {
 					text-align: right;
 					min-width: 80px;
@@ -439,22 +455,27 @@ onMounted(() => {
 					line-height: 32px;
 					margin-right: 10px;
 				}
+
 				.form-item-content {
 					flex: 1;
+
 					::v-deep .el-input,
 					::v-deep .el-date-editor {
 						width: 400px;
 						height: 32px;
 					}
+
 					::v-deep .el-textarea {
 						width: 600px;
 					}
 				}
+
 				.form-item-box {
 					background: #ffffff;
 					border: 1px solid #d8d8d8;
 				}
 			}
+
 			.form-item-inline {
 				@extend .form-item;
 				display: inline-flex;
