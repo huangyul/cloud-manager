@@ -4,19 +4,20 @@ import http, { amesFetch } from '/@/utils/axios/ames-http'
 
 // 获取销售模块列表所需的下拉参数
 export function getSalePackageListOptions(data) {
-	return http({
-		url: '/AemsPromotionData/GetLoadData',
-		method: 'post',
+	return amesFetch({
+		url: '/AemsPackage/ListInitializeData',
 		data,
 	})
 }
 
 // 获取销售模块列表
-export function getSalePackageList(data) {
-	return http({
-		url: '/AemsPromotionData/Query',
-		method: 'post',
+export function getSalePackageList(data, currentPage, pageSize, sort) {
+	return amesFetch({
+		url: '/AemsPackage/Query',
 		data,
+		currentPage,
+		pageSize,
+		sort,
 	})
 }
 
@@ -47,11 +48,36 @@ export function getSalePageData(data = {}) {
 	})
 }
 
+// 根据渠道获取销售页面
+export function getSalePageDataByChannel(data) {
+	return amesFetch({
+		url: '/AemsPackagePage/QueryByPromotion',
+		data,
+	})
+}
+
 // 新建套餐时所需的数据
 export function beforeCreatePackage(data = {}) {
 	return amesFetch({
-		url: '/AemsPackagePage/InitializeData',
+		url: '/AemsPackage/InitializeData',
 		method: 'post',
+		data,
+	})
+}
+
+// 保存方案套餐
+export function savePackage(data) {
+	return amesFetch({
+		url: '/AemsPackage/Save',
+		method: 'post',
+		data,
+	})
+}
+
+// 删除方案
+export function deletePackage(data) {
+	return amesFetch({
+		url: '/AemsPackage/Delete',
 		data,
 	})
 }

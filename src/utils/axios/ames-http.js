@@ -5,7 +5,7 @@ import { useUserStore } from '../../store/modules/user'
 import completeConfig from '../generate-http-sign'
 
 const axiosInstance = axios.create({
-	timeout: 10000,
+	timeout: 30000,
 	baseURL: '/Api',
 	method: 'post',
 })
@@ -51,13 +51,16 @@ axiosInstance.interceptors.response.use(
 	},
 )
 
-export const amesFetch = ({ url, data, currentPage, pageSize }) => {
+export const amesFetch = ({ url, data, currentPage, pageSize, sort }) => {
 	const reqData = {
 		ResultSerialize: false,
 		ParamDict: data,
 	}
 	if (currentPage && pageSize) {
 		reqData.PageSetting = { PageNum: currentPage, PageSize: pageSize }
+	}
+	if (sort) {
+		reqData.SortFields = { ...sort }
 	}
 	return axiosInstance({
 		url,

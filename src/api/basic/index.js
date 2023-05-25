@@ -28,18 +28,18 @@ export function getTags(type) {
 	return axiosInstance({
 		url: '/AemsSelector/SelectLabels',
 		data: {
-			// ParamDict: {
-			// 	// Type: type, // 营销方案: FrmPromotionData1    销售套餐: FrmPromotionData0
-			// 	// SelectLabelValuesString: '',
-			// 	Type: 'FrmPromotionData1',
-			// 	SelectLabelValuesString:
-			// 		'4U9AGPT4U7C6115K2G90P50A50P6WH8G4VQ08P,4U9AGAL76TPS16ZD0M1WFRBR909UZ3O0LW372J',
-			// },
-
 			ParamDict: {
-				Type: 'FrmPromotionData0',
+				Type: type, // 营销方案: FrmPromotionData1    销售套餐: FrmPromotionData0
 				SelectLabelValuesString: '',
 			},
 		},
+	})
+}
+
+// 获取销售页面及页面位置
+export function getSalePagePositoin() {
+	return axiosInstance({
+		url: '/AemsPackagePage/QueryIndex',
+		data: {},
 	})
 }

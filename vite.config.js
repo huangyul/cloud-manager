@@ -31,7 +31,7 @@ export default defineConfig(async ({ command, mode }) => {
 			port: 5173,
 			proxy: {
 				'/Api': {
-					target: 'http://192.168.16.154:8005',
+					target: 'http://192.168.16.154:8006',
 					changeOrigin: true,
 				},
 			},

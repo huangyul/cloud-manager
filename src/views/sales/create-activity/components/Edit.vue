@@ -1,17 +1,16 @@
 <!-- 新建活动-编辑 -->
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, provide, ref, watch } from 'vue'
 import WangEdit from '../../../../components/common/WangEdit.vue'
 import SaleItem from './SaleItem.vue'
 import Steps from './Steps.vue'
 import UploadImg from './UploadImg.vue'
-import { debounce } from '/@/utils/helper.js'
+import { debounce, deepClone } from '/@/utils/helper.js'
 import ChooseShopDialog from '/@/components/common/ChooseShopDialog.vue'
-import { beforeCreatePackage } from '../../../../api/sales'
+import { beforeCreatePackage, savePackage } from '../../../../api/sales'
 import { useRoute, useRouter } from 'vue-router'
-import { useTabs } from '../../../../hooks/basic'
 import { useMultipleTabStore } from '/@/store/modules/multipleTab'
-const radio1 = ref('')
+import { ElMessage } from 'element-plus'
 
 const emits = defineEmits(['go-back'])
 
@@ -59,76 +58,71 @@ const handleStepChange = debounce(() => {
  * 选择门店
  */
 let isChooseShopDialogShow = ref(false)
+const selectStore = ref([])
+const onSelectChange = (val) => {
+	selectStore.value = val
+}
+const handleSaveStore = (val) => {
+	data.value.ApplyStoreList = [...new Set(val)]
+}
+const handleDeleteStore = (item) => {
+	let deleteId = []
+	if (item) {
+		deleteId.push(item.StoreID)
+	} else {
+		selectStore.value.forEach((i) => {
+			deleteId.push(i.StoreID)
+		})
+	}
+	deleteId.forEach((id) => {
+		data.value.ApplyStoreList.splice(
+			data.value.ApplyStoreList.findIndex((i) => i.StoreID == id),
+		)
+	})
+}
 
 // 表单数据
 const data = ref({
 	ID: '',
-	Name: 'minno1',
-	Code: '54T006231',
-	UseDiscount: '1',
+	Name: '',
+	Code: '',
+	UseDiscount: false,
 	Remark: '',
-	StartTime: '2023/04/29',
-	EndTime: '3000/01/01 23:59:59',
+	StartTime: '',
+	EndTime: '',
 	BusinessJson: {
-		Price: '100',
-		CoinNum: '1',
-		memberLevel: ['B'],
-		AuthorizeSale: 0,
+		Price: '',
+		CoinNum: '',
+		SetNo: '',
+		memberLevel: [],
+		AuthorizeSale: false,
 	},
-	ApplyStoreList: [
-		{
-			PromotionDataID: '10001_001',
-			StoreID: '93G257YH0002B00',
-			StoreNo: '001',
-			StoreName: '云管家001店',
-			HandleState: 0,
-			OrganizationID: null,
-			TaskID: null,
-			TaskStatus: null,
-			SourceFlag: 0,
-			ID: '4UJT9J2IU1EG0ZE1ZPM2S1G2Z3S37NRMWSVUS2',
-			CreateTime: '/Date(1682751072387)/',
-			ModifyTime: '/Date(1682751072387)/',
-			ModifyOperatorID: null,
-			DirtyFlag: 0,
-			RowState: 4,
-			Tag: null,
-		},
-	],
-	ReportLabelList: ['3:4UJT7BOIY21S11NHYXQEH6BDR05RSFS8EY3ZX4'],
-	PartnerID: '9E5DJ9KX0002200',
+	ApplyStoreList: [],
+	ReportLabelList: [''],
+	PartnerID: '',
 	ImageData: {
-		MainPic:
-			'/AemsCloudResource/93G24LFI0001700/2023/c6af7162-31c3-49e8-9862-95c27552c07b.png',
+		MainPic: '',
 		EnclosurePics: [],
 	},
 	SubTitle: '',
-	AttachInfoHtml: '',
-	PromotionAddinID: 'de8820b3-962d-4c03-b6f5-ddb54b9482e4',
+	AttachInfoHtml: '<p>123</p>',
+	PromotionAddinID: props.id,
 	Category: 0,
-	PromotionChannel: [
-		{
-			ID: '6C85F90A-75DE-45E7-8F37-F34AEF74CCE3',
-			ProductID: '',
-		},
-	],
-	PromotionPositionInfo: [
-		{
-			PageName: '店长精选',
-			PromotionDataID: '7e41b561-ea6f-40cf-bd0f-9b55e9489e71',
-			PageNo: 'D1',
-			PageID: '93HIV3BJ0001B00',
-			RowIndex: '2',
-			ColIndex: '2',
-			BgColor: 'rgb(45, 100, 194)',
-		},
-	],
+	PromotionChannel: [],
+	PromotionPositionInfo: [],
 })
 // 保存
-const handleSave = () => {
-	const param = {
-		...data.value,
-	}
+const handleSave = async () => {
+	const param = deepClone(data.value)
+	param.EndTime = param.StartTime[1]
+	param.StartTime = param.StartTime[0]
+	param.BusinessJson.AuthorizeSale = param.BusinessJson.AuthorizeSale ? 1 : 0
+	param.UseDiscount = param.UseDiscount ? 0 : 1
+	param.BusinessJson.memberLevel = selectMemberList.value
+	console.log(param)
+	await savePackage(param)
+	ElMessage.success('保存成功')
+	handleClose('salesPackages')
 }
 
 const route = useRoute()
@@ -136,26 +130,73 @@ const router = useRouter()
 const tabStore = useMultipleTabStore()
 
 // 关闭
-const handleClose = () => {
+const handleClose = (routeName) => {
 	tabStore.tabList = tabStore.tabList.filter((t) => t.path != route.path)
 	const len = tabStore.tabList.length
 	if (len == 0) {
 		router.replace('/')
 	} else {
-		router.replace(tabStore.tabList[len - 1].path)
+		if (routeName) {
+			debugger
+			router.push({ name: routeName })
+		} else {
+			router.replace(tabStore.tabList[len - 1].path)
+		}
 	}
 }
 
+/**
+ * 选择会员
+ */
+const selectMemberList = ref([])
+const selectMemberAll = ref(false)
+const isIndeterminate = ref(false)
+const isSelectMember = ref('2')
+const handleCheckAllChange = (val) => {
+	selectMemberList.value = val
+		? initData.value.LeagSorts.map((i) => i.SortNo)
+		: []
+	isIndeterminate.value = false
+}
+const handleCheckChange = (value) => {
+	const checkedCount = value.length
+	selectMemberAll.value = checkedCount === initData.value.LeagSorts.length
+	isIndeterminate.value =
+		checkedCount > 0 && checkedCount < initData.value.LeagSorts.length
+}
+watch(isSelectMember, (val) => {
+	console.log(val)
+	if (val == 1) {
+		selectMemberAll.value = false
+		selectMemberList.value = []
+		isIndeterminate.value = false
+	}
+})
+
+const initData = ref({
+	AllowChannels: [],
+	LeagSorts: [],
+	Partners: [],
+})
 const init = async () => {
-	// data.value =
-	await beforeCreatePackage({ AddinID: props.id })
-	// data.value.AllowChannels.forEach((i) => {})
+	const res = await beforeCreatePackage({ AddinID: props.id })
+	initData.value.AllowChannels = res.AllowChannels
+	initData.value.AllowChannels.forEach((i) => (i.isChecked = false))
+	initData.value.LeagSorts = res.LeagSorts
+	res.Partners.forEach((i) => {
+		initData.value.Partners.push({
+			label: i.Name,
+			value: i.ID,
+		})
+	})
 }
 
 onMounted(() => {
 	formBoxRef.value.addEventListener('scroll', handleStepChange)
 	init()
 })
+
+provide('data', data)
 </script>
 
 <template>
@@ -172,9 +213,9 @@ onMounted(() => {
 				<Steps ref="stepRef"></Steps>
 			</div>
 			<div class="flex">
-				<div class="btn btn-grey mr10" @click="handleClose">关闭</div>
+				<div class="btn btn-grey mr10" @click="handleClose()">关闭</div>
 				<div class="btn btn-blue mr10" @click="handleSave">保存</div>
-				<div class="btn btn-blue">保存并新增</div>
+				<!-- <div class="btn btn-blue">保存并新增</div> -->
 			</div>
 		</div>
 
@@ -191,8 +232,8 @@ onMounted(() => {
 				</div>
 				<div class="pt20 pr60 pl20" v-show="isExpand.baseInfo">
 					<div class="form-item">
-						<div class="form-label">活动名称:</div>
-						<div class="form-item-content">
+						<div class="form-label label-required">活动名称:</div>
+						<div class="form-item-content flex items-center">
 							<el-input v-model="data.Name"></el-input>
 							<el-checkbox
 								class="ml30"
@@ -215,18 +256,19 @@ onMounted(() => {
 						</div>
 					</div>
 					<div class="form-item mt14">
-						<div class="form-label">活动编号:</div>
+						<div class="form-label label-required">活动编号:</div>
 						<div class="form-item-content">
 							<el-input v-model="data.Code"></el-input>
 						</div>
 					</div>
 					<div class="form-item mt14">
-						<div class="form-label">活动时间:</div>
+						<div class="form-label label-required">活动时间:</div>
 						<div class="form-item-content">
 							<el-date-picker
 								v-model="data.StartTime"
 								type="daterange"
 								range-separator="~"
+								value-format="YYYY-MM-DD"
 								start-placeholder="开始时间"
 								end-placeholder="结束时间"
 							/>
@@ -249,23 +291,34 @@ onMounted(() => {
 							<div class="btn btn-blue" @click="isChooseShopDialogShow = true">
 								选择门店
 							</div>
-							<div class="btn btn-blue ml10">删除</div>
+							<div class="btn btn-blue ml10" @click="handleDeleteStore()">
+								删除
+							</div>
 							<!-- 表格 -->
 							<div class="table w-100 mt14">
 								<el-table
 									:data="data.ApplyStoreList"
 									border
 									empty-text="暂无数据"
+									@selection-change="onSelectChange"
 								>
 									<el-table-column type="selection"></el-table-column>
-									<el-table-column label="编号" prop="qty"></el-table-column>
+									<el-table-column
+										label="编号"
+										prop="master_no"
+									></el-table-column>
 									<el-table-column
 										label="名称"
-										prop="goods_name"
+										prop="ShortName"
 									></el-table-column>
 									<el-table-column label="操作">
-										<template #default>
-											<div class="btn-blue btn-table">删除</div>
+										<template #default="{ row }">
+											<div
+												class="btn-blue btn-table"
+												@click="handleDeleteStore(row)"
+											>
+												删除
+											</div>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -286,7 +339,7 @@ onMounted(() => {
 				</div>
 				<div class="pt20 pr60 pl20" v-show="isExpand.activityDetail">
 					<div class="form-item-inline mr40">
-						<div class="form-label">支付金额:</div>
+						<div class="form-label label-required">支付金额:</div>
 						<div class="form-item-content">
 							<el-input v-model="data.BusinessJson.Price" class="w200">
 								<template #suffix>元</template>
@@ -294,7 +347,7 @@ onMounted(() => {
 						</div>
 					</div>
 					<div class="form-item-inline">
-						<div class="form-label">获得代币:</div>
+						<div class="form-label label-required">获得代币:</div>
 						<div class="form-item-content">
 							<el-input v-model="data.BusinessJson.CoinNum" class="w200">
 								<template #suffix>枚</template>
@@ -304,25 +357,31 @@ onMounted(() => {
 					<div class="form-item mt14">
 						<div class="form-label">活动对象:</div>
 						<div class="form-item-content">
-							<el-radio-group v-model="radio1">
+							<el-radio-group v-model="isSelectMember">
 								<el-radio label="1" size="large">不限制</el-radio>
 								<el-radio label="2" size="large">仅限会员</el-radio>
 							</el-radio-group>
-							<div class="form-item-box p16">
-								<el-radio-group v-model="radio1">
-									<el-radio label="1" size="large">全部会员</el-radio>
-								</el-radio-group>
+							<div class="form-item-box p16" v-show="isSelectMember == 2">
+								<el-checkbox
+									v-model="selectMemberAll"
+									:indeterminate="isIndeterminate"
+									@change="handleCheckAllChange"
+								>
+									全部会员
+								</el-checkbox>
 								<div class="br mt5 mb5"></div>
-								<el-radio-group v-model="radio1" class="flex">
-									<el-radio
-										style="width: 23%"
-										size="large"
-										:label="3"
-										v-for="i in 9"
+								<el-checkbox-group
+									size="large"
+									@change="handleCheckChange"
+									v-model="selectMemberList"
+								>
+									<el-checkbox
+										:label="user.SortNo"
+										v-for="user in initData.LeagSorts"
 									>
-										Option A
-									</el-radio>
-								</el-radio-group>
+										{{ user.SortName }}
+									</el-checkbox>
+								</el-checkbox-group>
 							</div>
 						</div>
 					</div>
@@ -353,8 +412,8 @@ onMounted(() => {
 					</el-icon>
 				</div>
 				<div class="pl110 pt20 pb20 pr106" v-show="isExpand.salesChannel">
-					<template v-for="(data, index) in data.AllowChannels">
-						<SaleItem v-model:data="data.AllowChannels[index]"></SaleItem>
+					<template v-for="(data, index) in initData.AllowChannels">
+						<SaleItem v-model:data="initData.AllowChannels[index]"></SaleItem>
 					</template>
 				</div>
 			</div>
@@ -370,15 +429,22 @@ onMounted(() => {
 				</div>
 				<div class="pt20 pr60 pl20" v-show="isExpand.other">
 					<div class="form-item-inline mr40">
-						<div class="form-label">支付金额:</div>
+						<div class="form-label">合作商:</div>
 						<div class="form-item-content">
-							<el-input class="w200"></el-input>
+							<el-select v-model="data.PartnerID" class="!w-48 partner">
+								<el-option
+									v-for="item in initData.Partners"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								/>
+							</el-select>
 						</div>
 					</div>
 					<div class="form-item-inline mr40">
-						<div class="form-label">其他:</div>
+						<div class="form-label">备注:</div>
 						<div class="form-item-content">
-							<el-input class="w500"></el-input>
+							<el-input v-model="data.Remark" class="w500"></el-input>
 						</div>
 					</div>
 				</div>
@@ -389,6 +455,8 @@ onMounted(() => {
 		<!-- 选择门店弹窗 -->
 		<ChooseShopDialog
 			v-model:isChooseDialogShow="isChooseShopDialogShow"
+			:defaultStore="data.ApplyStoreList"
+			@confirm="handleSaveStore"
 		></ChooseShopDialog>
 	</div>
 </template>
@@ -482,5 +550,43 @@ onMounted(() => {
 			}
 		}
 	}
+}
+
+::v-deep .el-checkbox.el-checkbox--large .el-checkbox__inner,
+::v-deep .el-checkbox__inner {
+	width: 20px;
+	height: 20px;
+}
+
+::v-deep .el-checkbox__inner::after {
+	box-sizing: content-box;
+	content: '';
+	border: 2px solid var(--el-checkbox-checked-icon-color);
+	border-left: 0;
+	border-top: 0;
+	height: 11px;
+	left: 6px;
+	position: absolute;
+	top: 1px;
+	transform: rotate(45deg) scaleY(0);
+	width: 5px;
+	transition: transform 0.15s ease-in 0.05s;
+	transform-origin: center;
+}
+
+::v-deep .el-checkbox__input.is-indeterminate .el-checkbox__inner::before {
+	content: '';
+	position: absolute;
+	display: block;
+	background-color: var(--el-checkbox-checked-icon-color);
+	height: 4px;
+	transform: scale(0.6);
+	left: 0;
+	right: 0;
+	top: 7px;
+}
+
+.partner ::v-deep .el-input {
+	width: 100% !important;
 }
 </style>

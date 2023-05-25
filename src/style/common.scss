@@ -4,30 +4,39 @@
   .m#{$i} {
     margin: #{$i}px;
   }
+
   .mt#{$i} {
     margin-top: #{$i}px;
   }
+
   .mb#{$i} {
     margin-bottom: #{$i}px;
   }
+
   .mr#{$i} {
     margin-right: #{$i}px;
   }
+
   .ml#{$i} {
     margin-left: #{$i}px;
   }
+
   .p#{$i} {
     padding: #{$i}px;
   }
+
   .pt#{$i} {
     padding-top: #{$i}px;
   }
+
   .pb#{$i} {
     padding-bottom: #{$i}px;
   }
+
   .pr#{$i} {
     padding-right: #{$i}px;
   }
+
   .pl#{$i} {
     padding-left: #{$i}px;
   }
@@ -48,10 +57,12 @@
   @extend .flex;
   justify-content: flex-end;
 }
+
 .flex-row-left {
   @extend .flex;
   justify-content: flex-start;
 }
+
 .flex-row-between {
   @extend .flex;
   justify-content: space-between;
@@ -77,10 +88,12 @@
   margin: 0 0 17px 0;
   display: flex;
   align-items: center;
+
   .search-item {
     display: flex;
     align-items: center;
     width: 25%;
+
     .label {
       text-align: right;
       width: 120px;
@@ -88,24 +101,29 @@
     }
   }
 }
+
 .table {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   flex: 1;
-  height: 500px;
+
+  // height: 500px;
   // ele表格样式调整
   th.el-table__cell {
     background: #ebeced !important;
     border: 0.5px solid #e5e5e5;
   }
+
   th.el-table__cell {
     height: 36px !important;
   }
+
   td.el-table__cell {
     height: 36px !important;
   }
-  th.el-table__cell > .cell {
+
+  th.el-table__cell>.cell {
     font-size: 13px;
     font-family: Microsoft YaHei;
     font-weight: bold;
@@ -113,12 +131,15 @@
     line-height: 37px;
     // background: #ebeced !important;
   }
+
   .el-table__cell {
     padding: 0 !important;
   }
+
   .el-table__footer-wrapper .el-table__cell {
     background: #fef9ea;
   }
+
   .page {
     background: #ffffff;
     padding-right: 25px;
@@ -134,22 +155,28 @@
 .el-form-item {
   margin-bottom: 14px !important;
 }
+
 .el-form-item__content {
   min-height: 32px;
 }
+
 .el-radio {
   margin-right: 12px !important;
 }
+
 .page {
   padding: 8px 0;
 }
+
 .el-input-number {
   width: 100% !important;
 }
+
 // 标题侧边小竖线
 .left-item {
   position: relative;
   padding-left: 10px;
+
   &::before {
     position: absolute;
     top: 0;
@@ -166,6 +193,7 @@
 // 橙色下标
 .left-orange {
   @extend .left-item;
+
   &::before {
     background: #f9c02e;
   }
@@ -179,6 +207,7 @@
   .w#{$i} {
     width: #{$i}px !important;
   }
+
   .h#{$i} {
     height: #{$i}px !important;
   }
@@ -187,6 +216,7 @@
 .w-100 {
   width: 100%;
 }
+
 .h-100 {
   height: 100%;
 }
@@ -194,6 +224,7 @@
 .w-25 {
   width: 25%;
 }
+
 .w-50 {
   width: 50%;
 }
@@ -201,9 +232,11 @@
 .text-right {
   text-align: right;
 }
+
 .text-center {
   text-align: center;
 }
+
 .text-left {
   text-align: left;
 }
@@ -245,6 +278,7 @@
   color: #f59c00;
   display: flex;
   align-items: center;
+
   img {
     width: 16px;
     height: 16px;
@@ -305,6 +339,7 @@
   padding: 9px 16px;
   border-bottom: 1px solid #e6e6e6;
   display: flex;
+
   button:not(:last-child) {
     margin-right: 10px;
   }
@@ -331,4 +366,25 @@
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 3px;
+}
+
+.label-required::before {
+  content: "*";
+  color: red;
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.table-btn {
+  padding: 8px 10px;
+  background: #4996F3;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 13px;
+  margin-right: 8px;
+  cursor: pointer;
+  user-select: none;
 }

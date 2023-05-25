@@ -53,28 +53,25 @@
 					:data="tableData"
 					height="400"
 					border
-					@sort-change="sortChange"
 					@selection-change="onSelectChange"
+					ref="tableRef"
 					empty-text="暂无数据"
 				>
 					<el-table-column type="selection" width="50" />
 					<el-table-column
 						label="门店编号"
 						min-width="160"
-						sortable="custom"
-						prop="name"
+						prop="master_no"
 					></el-table-column>
 					<el-table-column
 						label="门店名称"
-						prop="code"
+						prop="ShortName"
 						min-width="120"
-						sortable="custom"
 					></el-table-column>
 					<el-table-column
 						min-width="120"
 						label="门店组"
-						prop="type_name"
-						sortable="custom"
+						prop="ShortName"
 					></el-table-column>
 				</el-table>
 
@@ -105,16 +102,20 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import { getStoreList } from '/@/api/basic/index'
 const props = defineProps({
 	isChooseDialogShow: {
 		type: Boolean,
 		default: false,
 	},
+	defaultStore: {
+		type: Array,
+		default() {
+			return []
+		},
+	},
 })
-
-const data = ref([])
 
 const emits = defineEmits(['update:isChooseDialogShow', 'confirm'])
 
@@ -124,9 +125,13 @@ let pageSize = ref(10)
 let currentPage = ref(1)
 let total = ref(0)
 let selectData = ref([])
+let beforeSearchData = ref([])
+const tableRef = ref(null)
 
 const doSearch = async () => {
-	await getStoreList(
+	beforeSearchData.value = selectData.value
+	console.log('beforeSearchData', beforeSearchData.value)
+	const res = await getStoreList(
 		{
 			OrgType: 1, // TODO  1-只查询门店，2-所有组织
 			Code: searchList.value.code,
@@ -136,9 +141,22 @@ const doSearch = async () => {
 		currentPage.value,
 		pageSize.value,
 	)
+	tableData.value = res.List
+	total.value = res.TotalRows
+	nextTick(() => {
+		if (tableRef.value) {
+			selectData.value = beforeSearchData.value
+			console.log(selectData.value)
+			selectData.value.forEach((row) => {
+				const r = tableData.value.find((r) => r.ID == row.ID)
+				tableRef.value.toggleRowSelection(r, true)
+			})
+		}
+	})
 }
 
 const onSelectChange = (selection) => {
+	console.log(selection)
 	selectData.value = selection
 }
 
@@ -173,9 +191,18 @@ watch(
 	() => props.isChooseDialogShow,
 	(value) => {
 		if (value) {
+			nextTick(() => {
+				console.log(props.defaultStore)
+
+				selectData.value = props.defaultStore
+				props.defaultStore.forEach((row) => {
+					console.log('init', row)
+					tableRef.value.toggleRowSelection(row, true)
+				})
+			})
 		}
 	},
-	{ immediate: true },
+	{ immediate: true, deep: true },
 )
 
 onMounted(() => {

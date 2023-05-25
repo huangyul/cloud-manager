@@ -4,15 +4,14 @@
 			style="border-bottom: 1px solid #ccc"
 			:editor="editorRef"
 			:defaultConfig="toolbarConfig"
-			:mode="mode"
+			mode="default"
 		/>
 		<Editor
-			style="height: 500px; overflow-y: hidden"
+			style="height: 300px; overflow-y: hidden"
 			v-model="valueHtml"
 			:defaultConfig="editorConfig"
-			:mode="mode"
+			mode="default"
 			@onCreated="handleCreated"
-			@onchanged="handleChanged"
 		/>
 	</div>
 </template>
@@ -20,7 +19,7 @@
 <script setup>
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
-import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
+import { onBeforeUnmount, ref, shallowRef, onMounted, watch } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 
 // 编辑器实例，必须用 shallowRef
@@ -28,22 +27,15 @@ const editorRef = shallowRef()
 
 const props = defineProps({
 	data: {
-		type: Object,
-		default() {
-			return {}
-		},
+		type: String,
+		default: '',
 	},
 })
 
 const emits = defineEmits(['update:data'])
 
 // 内容 HTML
-const valueHtml = ref('<p>hello</p>')
-
-// 模拟 ajax 异步获取内容
-onMounted(() => {
-	valueHtml.value = props.data
-})
+const valueHtml = ref('')
 
 const toolbarConfig = {}
 toolbarConfig.excludeKeys = [
@@ -78,11 +70,19 @@ onBeforeUnmount(() => {
 	editor.destroy()
 })
 
+onMounted(() => {
+	setTimeout(() => {
+		valueHtml.value = props.data
+	}, 500)
+})
+
+watch(valueHtml, (val, oldVal) => {
+	if (oldVal && val != oldVal && oldVal != '<p></br></p>') {
+		emits('update:data', val)
+	}
+})
+
 const handleCreated = (editor) => {
 	editorRef.value = editor // 记录 editor 实例，重要！
-}
-
-const handleChanged = () => {
-	emits('update:data', valueHtml.value)
 }
 </script>

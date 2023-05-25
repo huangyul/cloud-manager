@@ -5,9 +5,19 @@
 				<div
 					v-for="(value, key) in ownSearchList"
 					:key="key"
-					:class="[`item-${value.width ? value.width : 1}`, 'search-item']"
+					:class="[
+						`item-${value.width ? value.width : 1}`,
+						'search-item',
+						{ '!items-start': value.type == 'select-tag' },
+					]"
 				>
-					<div class="label-text">
+					<div
+						class="label-text"
+						:class="[
+							{ relative: value.type == 'select-tag' },
+							{ 'top-2': value.type == 'select-tag' },
+						]"
+					>
 						{{ value.label }}
 					</div>
 					<el-select
@@ -67,33 +77,42 @@
 						<input />
 					</div>
 					<!-- 标签选择 -->
-					<div v-if="value.type == 'select-tag'" class="item-input">
-						<div class="tag-box">
+					<div
+						v-if="value.type == 'select-tag'"
+						class="item-input !items-start"
+					>
+						<div class="tag-box !items-start">
 							<template v-for="(tagCat, index) in tagList">
-								<div class="tag-item" v-if="index < 2" :key="tagCat.value">
-									{{ tagCat.name }}：
-									<span
-										class="flex items-center pl-1"
-										v-for="tag in tagCat.tags"
-										:key="tag.value"
-									>
-										{{ tag.name }}
-										<el-icon
-											class="tag-close"
-											@click="handleCloseTag(tagCat, tag)"
+								<div
+									class="tag-item flex items-start flex-1"
+									v-if="index < 1"
+									:key="tagCat.value"
+								>
+									<div>{{ tagCat.name }}：</div>
+									<div class="flex flex-wrap flex-1">
+										<span
+											class="flex items-center pl-1"
+											v-for="tag in tagCat.tags"
+											:key="tag.value"
 										>
-											<Close />
-										</el-icon>
-									</span>
+											{{ tag.name }}
+											<el-icon
+												class="tag-close"
+												@click="handleCloseTag(tagCat, tag)"
+											>
+												<Close />
+											</el-icon>
+										</span>
+									</div>
 								</div>
 							</template>
 
 							<div
 								class="tag-more"
 								@click="openTagDialog"
-								v-if="tagList.length > 2"
+								v-if="tagList.length > 1"
 							>
-								+ {{ tagList.length - 2 }}
+								+ {{ tagList.length - 1 }}
 							</div>
 						</div>
 						<div class="tag-btn" @click="openTagDialog">选择</div>
@@ -138,7 +157,7 @@
 <script setup>
 import { deepClone, getCTime, timeSlotChange } from '/@/utils/helper'
 
-import { onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import ChooseGoodsTagsDialog from '../../components/common/ChooseGoodsTagsDialog.vue'
 
 const emits = defineEmits(['search', 'choose-tags', 'on-reset'])
@@ -253,6 +272,14 @@ const doSearch = () => {
 					}
 				}
 			}
+		} else if (ownSearchList.value[key].type == 'select-tag') {
+			let res = []
+			tagList.value.forEach((i) => {
+				i.tags.forEach((t) => {
+					res.push(`LabelValue${i.value}:${t.value}`)
+				})
+			})
+			search[key] = res.join(',')
 		} else {
 			search[key] = ownSearchList.value[key].value
 		}
@@ -297,6 +324,7 @@ const shortcuts = [
 // 重置
 const onReset = () => {
 	ownSearchList.value = deepClone(props.searchList)
+	tagList.value = []
 	emits('on-reset', ownSearchList.value)
 }
 
@@ -365,6 +393,19 @@ const openTagDialog = () => {
 }
 const handleTagConfirm = (value) => {
 	tagList.value = deepClone(value)
+	// nextTick(() => {
+	// 	let tagWidth = document.querySelector(".tag-item").clientWidth
+	// 	const selectInputWidth = document.querySelector(".tag-box").clientWidth
+	// 	if (tagList.value.length > 1) {
+	// 		console.log(document.querySelector(".tag-more").clientWidth)
+	// 		tagWidth += document.querySelector(".tag-more").clientWidth
+	// 	}
+	// 	if (tagWidth + 24 > selectInputWidth) {
+	// 		console.log('width')
+	// 		document.querySelector(".tag-item").style.width = "20px!important"
+	// 	}
+	// 	console.log(tagWidth, selectInputWidth)
+	// })
 }
 const handleCloseTag = (pTag, cTag) => {
 	tagList.value.forEach((tag) => {
@@ -404,30 +445,37 @@ onMounted(() => {
 	margin-right: 28px;
 	position: relative;
 	margin-bottom: 16px;
+
 	.search-com {
 		.search-list {
 			overflow: hidden;
+
 			::v-deep .el-form-item__label {
 				font-size: 14px;
 				font-family: Microsoft YaHei;
 				font-weight: 400;
 				color: #2f3339;
 			}
+
 			::v-deep .el-input {
 				height: 32px;
 				background: #ffffff;
 				border-radius: 4px;
 			}
+
 			::v-deep .el-select {
 				width: 100%;
 			}
+
 			::v-deep .el-date-editor.el-input,
 			.el-date-editor.el-input__wrapper {
 				width: 100%;
 			}
+
 			display: flex;
 			align-items: center;
 			flex-wrap: wrap;
+
 			.item {
 				display: flex;
 				align-items: center;
@@ -443,25 +491,31 @@ onMounted(() => {
 					font-size: 14px;
 				}
 			}
+
 			.item-1 {
 				@extend .item;
 				width: 25%;
 			}
+
 			.item-2 {
 				@extend .item;
 				width: 50%;
 			}
+
 			.item-3 {
 				@extend .item;
 				width: 75%;
 			}
+
 			.item-4 {
 				@extend .item;
 				width: 100%;
 			}
+
 			.item-exceed {
 				display: none;
 			}
+
 			.tag-btn {
 				width: 40px;
 				height: 24px;
@@ -476,12 +530,13 @@ onMounted(() => {
 				justify-content: center;
 				cursor: pointer;
 			}
+
 			.item-input {
 				display: inline-flex;
 				align-items: center;
 				justify-content: space-between;
 				padding: 4px;
-				height: 32px;
+				min-height: 32px;
 				// width: 100%;
 				width: calc(100% - 118px);
 				box-sizing: border-box;
@@ -494,10 +549,13 @@ onMounted(() => {
 				transition: var(--el-transition-box-shadow);
 				box-shadow: 0 0 0 1px
 					var(--el-input-border-color, var(--el-border-color)) inset;
+
 				.tag-box {
 					flex: 1;
 					display: flex;
+					align-items: center;
 					overflow: hidden;
+
 					.tag-item {
 						background: #e1eefd;
 						border-radius: 2px;
@@ -508,18 +566,20 @@ onMounted(() => {
 						flex-shrink: 0;
 						margin-right: 4px;
 						padding: 6px 8px;
-						display: flex;
-						align-items: center;
+
 						.tag-close {
 							cursor: pointer;
 						}
 					}
+
 					.tag-more {
 						@extend .tag-item;
 						cursor: pointer;
+						max-height: 24px;
 					}
 				}
 			}
+
 			.range-input {
 				display: inline-flex;
 				flex-grow: 1;
@@ -547,15 +607,18 @@ onMounted(() => {
 				}
 			}
 		}
+
 		.func {
 			display: flex;
 			justify-content: flex-end;
 			margin-top: 8px;
+
 			.btn:not(:last-child) {
 				margin-right: 10px;
 			}
 		}
 	}
+
 	.more {
 		position: absolute;
 		right: 0;
@@ -563,6 +626,7 @@ onMounted(() => {
 		top: 55px;
 		width: 15px;
 		height: 15px;
+
 		img {
 			width: 15px;
 			height: 15px;
@@ -571,6 +635,7 @@ onMounted(() => {
 			cursor: pointer;
 			user-select: none;
 		}
+
 		.extends {
 			transform: rotateX(180deg);
 		}
