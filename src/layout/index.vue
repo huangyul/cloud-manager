@@ -4,10 +4,9 @@
 		<div class="my-container">
 			<Aside class="aside"></Aside>
 			<div class="content">
-				{{ aliveRoutes }}
 				<RouterView v-slot="{ Component }">
 					<transition>
-						<KeepAlive>
+						<KeepAlive :include="aliveRoutes">
 							<component :is="Component" />
 						</KeepAlive>
 					</transition>

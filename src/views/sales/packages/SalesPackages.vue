@@ -248,7 +248,7 @@ const sortChange = ({ order, prop }) => {
 // 创建活动
 const openDialog = (item) => {
 	let query = item ? { id: item.ID, category: item.Category } : null
-	router.push({ name: 'createActivity', query })
+	router.push({ name: 'CreateActivity', query })
 }
 
 const doSearch = async () => {
