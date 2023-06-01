@@ -84,7 +84,7 @@
 						<div class="tag-box !items-start">
 							<template v-for="(tagCat, index) in tagList">
 								<div
-									class="tag-item flex items-start flex-1"
+									class="flex items-start flex-1 tag-item"
 									v-if="index < 1"
 									:key="tagCat.value"
 								>
@@ -159,6 +159,7 @@ import { deepClone, getCTime, timeSlotChange } from '/@/utils/helper'
 
 import { nextTick, onMounted, ref, watch } from 'vue'
 import ChooseGoodsTagsDialog from '../../components/common/ChooseGoodsTagsDialog.vue'
+import { useElTable } from '/@/hooks/basic'
 
 const emits = defineEmits(['search', 'choose-tags', 'on-reset'])
 
@@ -222,7 +223,7 @@ let ownSearchList = ref(deepClone(props.searchList))
 const isExpand = ref(false)
 // 搜索栏是否超出两行
 const isExceed = ref(false)
-
+const { updateTableHeight } = useElTable()
 // 点击展开图片
 const onExpand = () => {
 	if (!isExceed.value) {
@@ -230,6 +231,9 @@ const onExpand = () => {
 	} else {
 		isExpand.value = !isExpand.value
 	}
+	nextTick(() => {
+		updateTableHeight()
+	})
 }
 
 // 搜索

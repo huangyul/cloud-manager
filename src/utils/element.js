@@ -5,6 +5,7 @@
  */
 export function resetTableHeight(ref) {
 	// 浏览器总高度 - 表格元素到页面顶部的距离 - 分页组件的距离 - 两个内边距
+	console.log(getElementTopDis(ref.$el))
 	return window.innerHeight - getElementTopDis(ref.$el) - 62
 }
 

@@ -7,7 +7,7 @@
 				<el-icon class="mr6">
 					<Plus />
 				</el-icon>
-				创建活动
+				创建活动--{{ basicStore.tableHeight }}
 			</button>
 		</div>
 
@@ -25,7 +25,7 @@
 				style="width: 100%"
 				:data="tableData"
 				border
-				:height="tableHeight"
+				:height="basicStore.tableHeight"
 				@sort-change="sortChange"
 				sum-text="合计"
 				empty-text="暂无数据"
@@ -128,15 +128,15 @@
 
 <script setup>
 import MySearch from '/@/components/common/MySearch.vue'
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import {
 	getSalePackageList,
 	getSalePackageListOptions,
 } from '../../../api/sales'
 import moment from 'moment'
-import { resetTableHeight } from '/@/utils/element'
 import { useElTable } from '../../../hooks/basic'
+import { useBasicStore } from '../../../store/modules/basic'
 const router = useRouter()
 
 const searchList = ref({
@@ -203,8 +203,10 @@ let tableData = ref([])
 let pageSize = ref(10)
 let currentPage = ref(1)
 let total = ref(0)
-let tableHeight = ref(0)
 const tableRef = ref(null)
+useElTable(tableRef)
+const basicStore = useBasicStore()
+
 // 表格排序
 const sortChange = ({ order, prop }) => {
 	if (order == 'ascending') {
@@ -225,16 +227,6 @@ const sortChange = ({ order, prop }) => {
 	}
 	doSearch()
 }
-
-const resetTable = () => {
-	nextTick(() => {
-		if (tableRef.value) {
-			tableHeight.value = resetTableHeight(tableRef.value)
-		}
-	})
-}
-
-useElTable(tableRef)
 
 // 创建活动
 const openDialog = () => {
@@ -288,7 +280,6 @@ const init = async () => {
 
 onMounted(() => {
 	init()
-	resetTable()
 })
 </script>
 
