@@ -7,7 +7,7 @@
 				<el-icon class="mr6">
 					<Plus />
 				</el-icon>
-				创建活动--{{ basicStore.tableHeight }}
+				创建活动
 			</button>
 		</div>
 
