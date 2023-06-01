@@ -21,8 +21,8 @@ const generateUrl = (url) => {
 }
 
 const { setEdit, setList } = inject('created')
-const handleCreate = (id) => {
-	setEdit(id)
+const handleCreate = (id, name) => {
+	setEdit(id, name)
 }
 </script>
 
@@ -30,7 +30,9 @@ const handleCreate = (id) => {
 	<div class="box">
 		<img :src="generateUrl(props.data.UrlPath)" />
 		<p class="name">{{ props.data.Name }}</p>
-		<div class="box-btn" @click="handleCreate(props.data.ID)">立即创建</div>
+		<div class="box-btn" @click="handleCreate(props.data.ID, props.data.Name)">
+			立即创建
+		</div>
 	</div>
 </template>
 

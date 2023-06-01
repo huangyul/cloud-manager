@@ -20,6 +20,7 @@ const emits = defineEmits(['go-back'])
 
 const props = defineProps({
 	id: String,
+	name: String,
 })
 
 // 内容展开
@@ -102,7 +103,7 @@ const data = ref({
 		AuthorizeSale: false,
 	},
 	ApplyStoreList: [],
-	ReportLabelList: [''],
+	ReportLabelList: [],
 	PartnerID: '',
 	ImageData: {
 		MainPic: '',
@@ -194,7 +195,13 @@ const init = async () => {
 		})
 	})
 	if (route.query.id) {
-		await getPackageDetail({ ID: route.query.id })
+		const res = await getPackageDetail({ ID: route.query.id })
+		data.value = { ...res }
+		data.value.StartTime = [data.value.StartTime, data.value.EndTime]
+		data.value.BusinessJson.AuthorizeSale =
+			data.value.BusinessJson.AuthorizeSale == 1 ? true : false
+		data.value.UseDiscount = data.value.UseDiscount == 1 ? true : false
+		selectMemberList.value = data.value.BusinessJson.memberLevel
 	}
 }
 
@@ -216,7 +223,9 @@ provide('data', data)
 				>
 					<ArrowLeftBold />
 				</el-icon>
-				<span class="header-name">创建 - 代币入会套餐</span>
+				<span class="header-name">
+					{{ route.query.id ? '编辑' : '创建' }} - {{ props.name }}
+				</span>
 				<Steps ref="stepRef"></Steps>
 			</div>
 			<div class="flex">

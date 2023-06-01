@@ -10,11 +10,13 @@ const route = useRoute()
 // 切换
 let pageType = ref('list') // list | edit
 let curId = ref('')
+let categoryName = ref('')
 const setList = () => {
 	pageType.value = 'list'
 }
-const setEdit = (id) => {
+const setEdit = (id, name) => {
 	curId.value = id
+	categoryName.value = name
 	pageType.value = 'edit'
 }
 onBeforeUnmount(() => {
@@ -27,12 +29,17 @@ provide('created', {
 
 onMounted(() => {
 	if (route.query.id) {
-		setEdit(route.query.category)
+		setEdit(route.query.category, route.query.categoryName)
 	}
 })
 </script>
 
 <template>
 	<List v-if="pageType == 'list'"></List>
-	<Edit v-if="pageType == 'edit'" @go-back="setList" :id="curId"></Edit>
+	<Edit
+		v-if="pageType == 'edit'"
+		@go-back="setList"
+		:id="curId"
+		:name="categoryName"
+	></Edit>
 </template>

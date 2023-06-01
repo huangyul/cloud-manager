@@ -255,7 +255,13 @@ const sortChange = ({ order, prop }) => {
 
 // 创建活动
 const openDialog = (item) => {
-	let query = item ? { id: item.ID, category: item.Category } : null
+	let query = item
+		? {
+				id: item.ID,
+				category: item.PromotionAddinID,
+				categoryName: templateMap.value[item.PromotionAddinID],
+		  }
+		: null
 	router.push({ name: 'CreateActivity', query })
 }
 
