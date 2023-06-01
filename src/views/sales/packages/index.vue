@@ -3,7 +3,7 @@
 	<div class="">
 		<div class="top-action">
 			<!-- TODO 判断用户是否有新建权限 -->
-			<button class="flex btn btn-green flex-col-center" @click="openDialog">
+			<button class="flex btn btn-green flex-col-center" @click="openDialog()">
 				<el-icon class="mr6">
 					<Plus />
 				</el-icon>
@@ -36,7 +36,16 @@
 					min-width="140"
 					sortable="custom"
 					prop="Name"
-				></el-table-column>
+				>
+					<template #default="{ row }">
+						<span
+							class="text-blue-500 underline cursor-pointer"
+							@click="openDialog(row)"
+						>
+							{{ row.Name }}
+						</span>
+					</template>
+				</el-table-column>
 				<el-table-column
 					label="活动编号"
 					min-width="140"
@@ -99,7 +108,13 @@
 					<template #default="{ row }">
 						<div class="flex">
 							<div class="table-btn" v-if="row.StatuDesc == 'A'">提交</div>
-							<div class="table-btn" v-if="row.StatuDesc == 'A'">删除</div>
+							<div
+								class="table-btn"
+								v-if="row.StatuDesc == 'A'"
+								@click="handleDelete(row)"
+							>
+								删除
+							</div>
 							<div class="table-btn" v-if="row.StatuDesc != 'A'">变更</div>
 							<div class="table-btn" v-if="row.StatuDesc == 'E'">上架</div>
 							<div class="table-btn" v-if="row.StatuDesc == 'C'">下架</div>
@@ -131,12 +146,14 @@ import MySearch from '/@/components/common/MySearch.vue'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import {
+	deletePackage,
 	getSalePackageList,
 	getSalePackageListOptions,
 } from '../../../api/sales'
 import moment from 'moment'
 import { useElTable } from '../../../hooks/basic'
 import { useBasicStore } from '../../../store/modules/basic'
+import { ElMessage } from 'element-plus'
 const router = useRouter()
 
 const searchList = ref({
@@ -229,8 +246,9 @@ const sortChange = ({ order, prop }) => {
 }
 
 // 创建活动
-const openDialog = () => {
-	router.push({ name: 'createActivity' })
+const openDialog = (item) => {
+	let query = item ? { id: item.ID, category: item.Category } : null
+	router.push({ name: 'createActivity', query })
 }
 
 const doSearch = async () => {
@@ -275,6 +293,17 @@ const init = async () => {
 			label: value,
 		})
 	})
+	doSearch()
+}
+
+/**
+ * table操作
+ */
+const handleDelete = async (item) => {
+	await deletePackage({
+		ID: item.ID,
+	})
+	ElMessage.success('删除成功')
 	doSearch()
 }
 

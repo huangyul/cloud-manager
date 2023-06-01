@@ -7,7 +7,11 @@ import Steps from './Steps.vue'
 import UploadImg from './UploadImg.vue'
 import { debounce, deepClone } from '/@/utils/helper.js'
 import ChooseShopDialog from '/@/components/common/ChooseShopDialog.vue'
-import { beforeCreatePackage, savePackage } from '../../../../api/sales'
+import {
+	beforeCreatePackage,
+	savePackage,
+	getPackageDetail,
+} from '../../../../api/sales'
 import { useRoute, useRouter } from 'vue-router'
 import { useMultipleTabStore } from '/@/store/modules/multipleTab'
 import { ElMessage } from 'element-plus'
@@ -189,6 +193,9 @@ const init = async () => {
 			value: i.ID,
 		})
 	})
+	if (route.query.id) {
+		await getPackageDetail({ ID: route.query.id })
+	}
 }
 
 onMounted(() => {
@@ -233,7 +240,7 @@ provide('data', data)
 				<div class="pt20 pr60 pl20" v-show="isExpand.baseInfo">
 					<div class="form-item">
 						<div class="form-label label-required">活动名称:</div>
-						<div class="form-item-content flex items-center">
+						<div class="flex items-center form-item-content">
 							<el-input v-model="data.Name"></el-input>
 							<el-checkbox
 								class="ml30"

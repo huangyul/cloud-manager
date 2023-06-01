@@ -2,7 +2,10 @@
 <script setup>
 import List from './components/List.vue'
 import Edit from './components/Edit.vue'
-import { onBeforeUnmount, provide, ref } from 'vue'
+import { onBeforeUnmount, onMounted, provide, ref } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 // 切换
 let pageType = ref('list') // list | edit
@@ -20,6 +23,12 @@ onBeforeUnmount(() => {
 provide('created', {
 	setEdit,
 	setList,
+})
+
+onMounted(() => {
+	if (route.query.id) {
+		setEdit(route.query.category)
+	}
 })
 </script>
 

@@ -21,6 +21,8 @@
 						{{ value.label }}
 					</div>
 					<el-select
+						multiple
+						collapse-tags
 						v-model="value.value"
 						v-if="value.type == 'select'"
 						:placeholder="value.placeholder || '请选择'"
@@ -284,6 +286,8 @@ const doSearch = () => {
 				})
 			})
 			search[key] = res.join(',')
+		} else if (ownSearchList.value[key].type == 'select') {
+			search[key] = ownSearchList.value[key].value.join(',')
 		} else {
 			search[key] = ownSearchList.value[key].value
 		}
@@ -569,7 +573,7 @@ onMounted(() => {
 						color: #318cf9;
 						flex-shrink: 0;
 						margin-right: 4px;
-						padding: 6px 8px;
+						padding: 4px 8px;
 
 						.tag-close {
 							cursor: pointer;

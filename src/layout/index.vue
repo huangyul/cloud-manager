@@ -4,6 +4,7 @@
 		<div class="my-container">
 			<Aside class="aside"></Aside>
 			<div class="content">
+				{{ aliveRoutes }}
 				<RouterView v-slot="{ Component }">
 					<transition>
 						<KeepAlive>
@@ -37,9 +38,11 @@ const aliveRoutes = computed(() => {
 .my-container {
 	display: flex;
 	height: calc(100vh - 40px);
+
 	.aside {
 		width: 90px;
 	}
+
 	.content {
 		overflow: auto;
 		flex: 1;

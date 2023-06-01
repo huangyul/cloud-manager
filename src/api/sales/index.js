@@ -81,3 +81,11 @@ export function deletePackage(data) {
 		data,
 	})
 }
+
+// 获取方案详情
+export function getPackageDetail(data) {
+	return amesFetch({
+		url: '/AemsPackage/GetDetail',
+		data,
+	})
+}
