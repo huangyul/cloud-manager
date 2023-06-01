@@ -163,7 +163,7 @@ import { nextTick, onMounted, ref, watch } from 'vue'
 import ChooseGoodsTagsDialog from '../../components/common/ChooseGoodsTagsDialog.vue'
 import { useElTable } from '/@/hooks/basic'
 
-const emits = defineEmits(['search', 'choose-tags', 'on-reset'])
+const emits = defineEmits(['search', 'choose-tags', 'on-reset', 'click-expend'])
 
 const props = defineProps({
 	// 超过多少行折叠，默认两行
@@ -233,9 +233,7 @@ const onExpand = () => {
 	} else {
 		isExpand.value = !isExpand.value
 	}
-	nextTick(() => {
-		updateTableHeight()
-	})
+	emits('click-expend')
 }
 
 // 搜索

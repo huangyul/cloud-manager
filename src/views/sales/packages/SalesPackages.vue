@@ -16,6 +16,7 @@
 			:options="searchOptions"
 			@search="getSearchCondition"
 			@reset="handleSearchReset"
+			@click-expend="resetHeight()"
 			class="mt8"
 		></MySearch>
 
@@ -25,7 +26,7 @@
 				style="width: 100%"
 				:data="tableData"
 				border
-				:height="basicStore.tableHeight"
+				:height="tableHeight"
 				@sort-change="sortChange"
 				sum-text="合计"
 				empty-text="暂无数据"
@@ -143,7 +144,7 @@
 
 <script setup>
 import MySearch from '/@/components/common/MySearch.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import {
 	deletePackage,
@@ -154,6 +155,7 @@ import moment from 'moment'
 import { useElTable } from '../../../hooks/basic'
 import { useBasicStore } from '../../../store/modules/basic'
 import { ElMessage } from 'element-plus'
+import { resetTableHeight } from '/@/utils/element'
 const router = useRouter()
 
 const searchList = ref({
@@ -222,7 +224,13 @@ let currentPage = ref(1)
 let total = ref(0)
 const tableRef = ref(null)
 useElTable(tableRef)
+let tableHeight = ref(0)
 const basicStore = useBasicStore()
+const resetHeight = () => {
+	nextTick(() => {
+		tableHeight.value = resetTableHeight(tableRef.value)
+	})
+}
 
 // 表格排序
 const sortChange = ({ order, prop }) => {
@@ -293,7 +301,9 @@ const init = async () => {
 			label: value,
 		})
 	})
-	doSearch()
+	nextTick(() => {
+		resetHeight()
+	})
 }
 
 /**
