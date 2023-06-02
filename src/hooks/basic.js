@@ -19,13 +19,13 @@ export async function useInitUser() {
 }
 
 // 获取token
-export async function useToken() {
+export async function useToken({ AppId, OrgId, userId }) {
 	// 重置store
 	const permissionStore = usePermissionStore()
 	permissionStore.$reset()
 	const userStore = useUserStore()
 	userStore.$reset()
-	const res = await getToken()
+	const res = await getToken(AppId, OrgId, userId)
 	localStorage.setItem('token', res.TokenId)
 	return
 }

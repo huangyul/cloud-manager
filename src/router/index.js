@@ -14,16 +14,24 @@ export const router = createRouter({
 	scrollBehavior: () => ({ left: 0, top: 0 }),
 })
 
-router.beforeEach(async (to, from, next) => {
+const generalUrlQuery = (query) => {
+	let res = ''
+	Object.keys(query).forEach((key, index) => {
+		res += `${index > 0 ? '&' : ''}${key}=${query[key]}`
+	})
+	return res
+}
+
+router.beforeEach(async (to, from) => {
 	// 如果没有token
 	const token = localStorage.getItem('token')
 	const permissionStore = usePermissionStore()
 	if (!token) {
-		await useToken()
-		next(to.path)
+		await useToken({ ...to.query })
+		return `${to.path}`
 	} else if (permissionStore.menuList.length == 0) {
 		await useInitUser()
-		next(to.path)
+		return `${to.path}`
 	} else {
 		// 路由跳转后添加tab
 		const tabStore = useMultipleTabStore()
@@ -33,9 +41,6 @@ router.beforeEach(async (to, from, next) => {
 		) {
 			tabStore.tabList.push(to)
 		}
-		console.log('tabList')
-		console.log(tabStore.tabList)
-		next()
 	}
 })
 
