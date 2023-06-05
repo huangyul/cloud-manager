@@ -218,6 +218,7 @@ provide('data', data)
 		<div class="header">
 			<div class="flex">
 				<el-icon
+					v-if="!data.ID"
 					style="color: #4996f3; cursor: pointer"
 					@click="emits('go-back')"
 				>

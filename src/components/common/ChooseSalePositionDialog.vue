@@ -24,7 +24,7 @@
 				<!-- 销售页面选择 -->
 				<div class="sale-page">
 					<div>
-						<div class="title mb-2">销售页面</div>
+						<div class="mb-2 title">销售页面</div>
 						<div class="page-list">
 							<div
 								v-for="page in pageList"
@@ -53,6 +53,7 @@
 					<div class="title">{{ currentPage?.Name }}</div>
 					<div class="box">
 						<div
+							id="drag-list"
 							class="flex flex-wrap"
 							:style="{ width: `${currentPage?.Cols * 246}px` }"
 						>
@@ -72,7 +73,7 @@
 			<template #footer>
 				<div class="footer">
 					<button class="btn-grey btn mr12" @click="close">关闭</button>
-					<button class="btn-blue btn">保存</button>
+					<button class="btn-blue btn" @click="onConfirm">保存</button>
 				</div>
 			</template>
 		</el-dialog>
@@ -80,7 +81,7 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref, watch } from 'vue'
+import { inject, ref, watch } from 'vue'
 import { getSalePageDataByChannel } from '../../api/sales'
 import DragItem from './DragItem.vue'
 const props = defineProps({
@@ -97,29 +98,27 @@ const emits = defineEmits(['update:isShow', 'confirm'])
 
 // 关闭弹窗
 const close = () => {
-	console.log(123123)
 	emits('update:isShow', false)
 }
 
 // 点击确定按钮
 const onConfirm = () => {
-	emits('confirm')
-}
-
-const list = ref([
-	{ id: 1, name: 'Card 1' },
-	{ id: 2, name: 'Card 2' },
-	{ id: 3, name: 'Card 3' },
-	{ id: 4, name: 'Card 4' },
-	{ id: 5, name: 'Card 5' },
-	{ id: 6, name: 'Card 6' },
-	{ id: 7, name: 'Card 7' },
-	{ id: 8, name: 'Card 8' },
-	{ id: 9, name: 'Card 9' },
-	{ id: 10, name: 'Card 10' },
-])
-const log = (event) => {
-	console.log(event)
+	const elList = document.getElementById('drag-list')
+	let pName, row, col, no
+	Array.from(elList.children).forEach((el, index) => {
+		const childrenList = Array.from(el.children)
+		if (childrenList.length > 0) {
+			const valueList = Array.from(childrenList[0].children)
+			// pName = valueList[0].innerText
+			// price = valueList[1].innerText
+			pName = currentPage.value.Name
+			row = pageLocationList.value[currentPage.value.ID][index].RowIndex
+			col = pageLocationList.value[currentPage.value.ID][index].ColIndex
+			no = currentPage.value.Code
+		}
+	})
+	emits('confirm', { pName, row, col, no, id: currentPage.value.ID })
+	close()
 }
 
 watch(

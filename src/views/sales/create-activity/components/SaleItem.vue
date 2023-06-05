@@ -17,7 +17,9 @@
 			v-if="isChecked && data.IsRelatePage"
 		>
 			<div class="label">销售页面:</div>
-			<div class="sale-item-page mr-4"></div>
+			<div class="mr-4 sale-item-page">
+				<div>{{}}</div>
+			</div>
 			<div class="btn btn-blue" @click="chooseSale">选择</div>
 		</div>
 
@@ -25,6 +27,7 @@
 		<ChooseSaleDialog
 			v-model:isShow="isChooseSaleDilaogShow"
 			:channleId="data.ID"
+			@confirm="saleConfirm"
 		></ChooseSaleDialog>
 	</div>
 </template>
@@ -42,7 +45,7 @@ const props = defineProps({
 	},
 })
 
-const emits = defineEmits(['update:data'])
+const emits = defineEmits(['update:data', 'confirm'])
 
 const isChecked = computed({
 	get: () => {
@@ -59,6 +62,9 @@ const isChecked = computed({
 let isChooseSaleDilaogShow = ref(false)
 const chooseSale = () => {
 	isChooseSaleDilaogShow.value = true
+}
+const saleConfirm = (val) => {
+	emits('confirm', val)
 }
 </script>
 

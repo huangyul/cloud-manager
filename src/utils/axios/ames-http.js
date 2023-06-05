@@ -33,6 +33,13 @@ axiosInstance.interceptors.response.use(
 	function (response) {
 		if (response.data.Code === 200) {
 			return response.data.Result
+		} else if (response.data.Code == 201) {
+			localStorage.clear()
+			sessionStorage.clear()
+			ElMessage({
+				message: '登录已过期，请重新登录',
+				type: 'warning',
+			})
 		} else {
 			ElMessage({
 				message: response.data.Message,
