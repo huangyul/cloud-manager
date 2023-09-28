@@ -17,8 +17,15 @@
 			v-if="isChecked && data.IsRelatePage"
 		>
 			<div class="label">销售页面:</div>
-			<div class="mr-4 sale-item-page">
-				<div>{{}}</div>
+			<div class="mr-4 sale-item-page flex items-center pr-1 pl-1">
+				<div
+					v-for="page in pageList"
+					class="text-tagName flex items-center bg-[#DBEAFD] p-1 cursor-pointer"
+					@click="handleClosePage(page)"
+				>
+					{{ page.label }}
+					<el-icon><Close /></el-icon>
+				</div>
 			</div>
 			<div class="btn btn-blue" @click="chooseSale">选择</div>
 		</div>
@@ -33,19 +40,27 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import ChooseSaleDialog from '../../../../components/common/ChooseSalePositionDialog.vue'
 
 const props = defineProps({
 	data: {
 		type: Object,
-		defaunt() {
+		default() {
 			return {}
+		},
+	},
+	channelList: {
+		type: Array,
+		default() {
+			return []
 		},
 	},
 })
 
-const emits = defineEmits(['update:data', 'confirm'])
+const pageList = ref([])
+
+const emits = defineEmits(['update:data', 'confirm', 'delete'])
 
 const isChecked = computed({
 	get: () => {
@@ -64,8 +79,21 @@ const chooseSale = () => {
 	isChooseSaleDilaogShow.value = true
 }
 const saleConfirm = (val) => {
-	emits('confirm', val)
+	const isExist = pageList.value.findIndex((i) => i.value == val.Id)
+	if (isExist == -1) {
+		pageList.value.push({ label: val.pName, value: val.id })
+	}
+	emits('confirm', val, props.data.ID)
 }
+
+const handleClosePage = (page) => {
+	pageList.value = pageList.value.filter((i) => i.value != page.value)
+	emits('delete', page.value)
+}
+
+onMounted(() => {
+	console.log(props)
+})
 </script>
 
 <style lang="scss" scoped>

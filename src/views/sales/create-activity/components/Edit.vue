@@ -68,7 +68,15 @@ const onSelectChange = (val) => {
 	selectStore.value = val
 }
 const handleSaveStore = (val) => {
-	data.value.ApplyStoreList = [...new Set(val)]
+	const res = []
+	val.forEach((i) => {
+		res.push({
+			StoreID: i.ID,
+			StoreNo: i.master_no,
+			StoreName: i.Name,
+		})
+	})
+	data.value.ApplyStoreList = [...new Set(res)]
 }
 const handleDeleteStore = (item) => {
 	let deleteId = []
@@ -127,7 +135,7 @@ const handleSave = async () => {
 	console.log(param)
 	await savePackage(param)
 	ElMessage.success('保存成功')
-	handleClose('salesPackages')
+	handleClose('SalesPackages')
 }
 
 const route = useRoute()
@@ -142,7 +150,6 @@ const handleClose = (routeName) => {
 		router.replace('/')
 	} else {
 		if (routeName) {
-			debugger
 			router.push({ name: routeName })
 		} else {
 			router.replace(tabStore.tabList[len - 1].path)
@@ -178,6 +185,33 @@ watch(isSelectMember, (val) => {
 	}
 })
 
+/**
+ * 销售渠道标签
+ */
+const handleSaleConfirm = (val, id) => {
+	const isExist = data.value.PromotionChannel.findIndex((i) => i.ID == id)
+	if (isExist == -1) {
+		data.value.PromotionChannel.push({
+			ID: id,
+			ProductID: '',
+		})
+	}
+	data.value.PromotionPositionInfo.push({
+		PageName: val.pName,
+		PromotionDataID: '',
+		PageNo: val.no,
+		PageID: val.id,
+		RowIndex: val.row,
+		ColIndex: val.col,
+		BgColor: 'rgb(45, 100, 194)',
+	})
+}
+const handleSaleDelete = (id) => {
+	data.value.PromotionPositionInfo = data.value.PromotionPositionInfo.filter(
+		(i) => i.PageID != id,
+	)
+}
+
 const initData = ref({
 	AllowChannels: [],
 	LeagSorts: [],
@@ -200,7 +234,7 @@ const init = async () => {
 		data.value.StartTime = [data.value.StartTime, data.value.EndTime]
 		data.value.BusinessJson.AuthorizeSale =
 			data.value.BusinessJson.AuthorizeSale == 1 ? true : false
-		data.value.UseDiscount = data.value.UseDiscount == 1 ? true : false
+		data.value.UseDiscount = data.value.UseDiscount == 0 ? true : false
 		selectMemberList.value = data.value.BusinessJson.memberLevel
 	}
 }
@@ -322,11 +356,11 @@ provide('data', data)
 									<el-table-column type="selection"></el-table-column>
 									<el-table-column
 										label="编号"
-										prop="master_no"
+										prop="StoreNo"
 									></el-table-column>
 									<el-table-column
 										label="名称"
-										prop="ShortName"
+										prop="StoreName"
 									></el-table-column>
 									<el-table-column label="操作">
 										<template #default="{ row }">
@@ -358,7 +392,13 @@ provide('data', data)
 					<div class="form-item-inline mr40">
 						<div class="form-label label-required">支付金额:</div>
 						<div class="form-item-content">
-							<el-input v-model="data.BusinessJson.Price" class="w200">
+							<el-input
+								@input="
+									(v) => (data.BusinessJson.Price = v.replace(/[^\d.]/g, ''))
+								"
+								v-model="data.BusinessJson.Price"
+								class="w200"
+							>
 								<template #suffix>元</template>
 							</el-input>
 						</div>
@@ -366,7 +406,13 @@ provide('data', data)
 					<div class="form-item-inline">
 						<div class="form-label label-required">获得代币:</div>
 						<div class="form-item-content">
-							<el-input v-model="data.BusinessJson.CoinNum" class="w200">
+							<el-input
+								@input="
+									(v) => (data.BusinessJson.CoinNum = v.replace(/[^\d.]/g, ''))
+								"
+								v-model="data.BusinessJson.CoinNum"
+								class="w200"
+							>
 								<template #suffix>枚</template>
 							</el-input>
 						</div>
@@ -430,7 +476,11 @@ provide('data', data)
 				</div>
 				<div class="pl110 pt20 pb20 pr106" v-show="isExpand.salesChannel">
 					<template v-for="(data, index) in initData.AllowChannels">
-						<SaleItem v-model:data="initData.AllowChannels[index]"></SaleItem>
+						<SaleItem
+							v-model:data="initData.AllowChannels[index]"
+							@confirm="handleSaleConfirm"
+							@delete="handleSaleDelete"
+						></SaleItem>
 					</template>
 				</div>
 			</div>

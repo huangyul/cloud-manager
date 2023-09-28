@@ -34,6 +34,10 @@ export default defineConfig(async ({ command, mode }) => {
 					target: 'http://192.168.16.154:8006',
 					changeOrigin: true,
 				},
+				'/cloudstoreservice': {
+					target: 'http://47.100.7.173:9013',
+					changeOrigin: true,
+				},
 			},
 		},
 	}

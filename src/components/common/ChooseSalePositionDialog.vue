@@ -44,6 +44,7 @@
 								type="drag"
 								:title="parentData.Name"
 								:value="parentData.BusinessJson.Price"
+								@clear="handleClear"
 							></DragItem>
 						</div>
 					</div>
@@ -63,6 +64,7 @@
 								type="empty"
 								title="50代币充值"
 								value="0.01"
+								@clear="handleClear"
 							></DragItem>
 						</div>
 					</div>
@@ -119,6 +121,13 @@ const onConfirm = () => {
 	})
 	emits('confirm', { pName, row, col, no, id: currentPage.value.ID })
 	close()
+}
+
+const handleClear = () => {
+	const elList = document.getElementById('drag-list')
+	Array.from(elList.children).forEach((el) => {
+		el.innerHTML = ''
+	})
 }
 
 watch(

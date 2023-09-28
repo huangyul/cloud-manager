@@ -144,8 +144,8 @@
 
 <script setup>
 import MySearch from '/@/components/common/MySearch.vue'
-import { ref, onMounted, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, nextTick, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import {
 	deletePackage,
 	getSalePackageList,
@@ -153,10 +153,10 @@ import {
 } from '../../../api/sales'
 import moment from 'moment'
 import { useElTable } from '../../../hooks/basic'
-import { useBasicStore } from '../../../store/modules/basic'
 import { ElMessage } from 'element-plus'
 import { resetTableHeight } from '/@/utils/element'
 const router = useRouter()
+const route = useRoute()
 
 const searchList = ref({
 	Name: {
@@ -225,7 +225,6 @@ let total = ref(0)
 const tableRef = ref(null)
 useElTable(tableRef)
 let tableHeight = ref(0)
-const basicStore = useBasicStore()
 const resetHeight = () => {
 	nextTick(() => {
 		tableHeight.value = resetTableHeight(tableRef.value)
@@ -322,6 +321,14 @@ const handleDelete = async (item) => {
 	ElMessage.success('删除成功')
 	doSearch()
 }
+
+watch(
+	() => route.path,
+	(val) => {
+		doSearch()
+	},
+	{ immediate: true },
+)
 
 onMounted(() => {
 	init()

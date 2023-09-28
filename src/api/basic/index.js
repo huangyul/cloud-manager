@@ -1,4 +1,4 @@
-import axiosInstance, { amesFetch } from '../../utils/axios/ames-http'
+import axiosInstance, { amesFetch } from '../../utils/axios/aems-http'
 
 // 获取token
 export function getToken(AppId, OrgId, UserId) {

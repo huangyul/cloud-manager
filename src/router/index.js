@@ -22,7 +22,11 @@ const generalUrlQuery = (query) => {
 	return res
 }
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to, from, next) => {
+	if (to.meta.notAuth) {
+		next()
+		return
+	}
 	// 如果没有token
 	const token = localStorage.getItem('token')
 	const permissionStore = usePermissionStore()

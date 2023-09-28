@@ -148,6 +148,7 @@
 
 		<!-- 便签选择弹窗 -->
 		<ChooseGoodsTagsDialog
+			v-if="isDialogShow"
 			ref="tagRef"
 			:tagType="props.tagType"
 			v-model:isShow="isDialogShow"
@@ -284,7 +285,10 @@ const doSearch = () => {
 				})
 			})
 			search[key] = res.join(',')
-		} else if (ownSearchList.value[key].type == 'select') {
+		} else if (
+			ownSearchList.value[key].type == 'select' &&
+			ownSearchList.value[key].value
+		) {
 			search[key] = ownSearchList.value[key].value.join(',')
 		} else {
 			search[key] = ownSearchList.value[key].value

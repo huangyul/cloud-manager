@@ -39,7 +39,7 @@ const props = defineProps({
 	domId: String,
 })
 
-const emit = defineEmits(['clear'])
+const emits = defineEmits(['clear'])
 
 const drag = (ev) => {
 	if (props.type == 'drag') {
@@ -51,8 +51,11 @@ const drag = (ev) => {
 }
 const drop = (ev) => {
 	if (ev.target == window.dragDom) return
-	if (window.dragDom.parentNode !== ev.target.parentNode) {
-		emit('clear')
+	if (
+		window.dragDom.parentNode !== ev.target.parentNode &&
+		ev.target.parentNode.id == 'drag-list'
+	) {
+		emits('clear')
 		ev.target.parentNode
 		// window.dragDom.parentNode.removeChild(window.dragDom);
 		// ev.target.appendChild(window.dragDom);

@@ -1,4 +1,4 @@
-import http, { amesFetch } from '/@/utils/axios/ames-http'
+import http, { amesFetch } from '/@/utils/axios/aems-http'
 
 /* 销售模块接口 */
 
