@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+import UnoCSS from 'unocss/vite'
 
 function pathResolve(dir) {
 	return resolve(process.cwd(), '.', dir)
@@ -13,7 +14,7 @@ export default defineConfig(async ({ command, mode }) => {
 	return {
 		// vite 配置
 		base: './',
-		plugins: [vue(), require('tailwindcss'), require('autoprefixer')],
+		plugins: [vue(), UnoCSS()],
 		resolve: {
 			alias: [
 				{

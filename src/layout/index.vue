@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<MyHeader></MyHeader>
+		<Header></Header>
 		<div class="my-container">
 			<Aside class="aside"></Aside>
 			<div class="content">
@@ -13,14 +13,17 @@
 				</RouterView>
 			</div>
 		</div>
+
+		<SystemTips></SystemTips>
 	</div>
 </template>
 
 <script setup>
-import MyHeader from './components/Header.vue'
+import Header from './components/Header.vue'
 import Aside from './components/Aside.vue'
 import { computed } from 'vue'
 import { useMultipleTabStore } from '/@/store/modules/multipleTab'
+import SystemTips from './components/system-tips.vue'
 
 const tabStore = useMultipleTabStore()
 
@@ -39,7 +42,7 @@ const aliveRoutes = computed(() => {
 	height: calc(100vh - 40px);
 
 	.aside {
-		width: 90px;
+		width: 130px;
 	}
 
 	.content {

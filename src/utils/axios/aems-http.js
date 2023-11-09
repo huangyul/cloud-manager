@@ -15,11 +15,11 @@ const whiteApi = ['/Token/GetToken']
 // 添加请求拦截器
 axiosInstance.interceptors.request.use(
 	function (config) {
-		const userStore = useUserStore()
-		userStore.isAction = true
-		if (!whiteApi.includes(config.url)) {
-			config = completeConfig(config)
-		}
+		// const userStore = useUserStore()
+		// userStore.isAction = true
+		// if (!whiteApi.includes(config.url)) {
+		// 	config = completeConfig(config)
+		// }
 		return config
 	},
 	function (error) {

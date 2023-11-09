@@ -23,6 +23,8 @@ const generalUrlQuery = (query) => {
 }
 
 router.beforeEach(async (to, from, next) => {
+	next()
+	return
 	if (to.meta.notAuth) {
 		next()
 		return
@@ -31,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
 	const token = localStorage.getItem('token')
 	const permissionStore = usePermissionStore()
 	if (!token) {
-		await useToken({ ...to.query })
+		// await useToken({ ...to.query })
 		return `${to.path}`
 	} else if (permissionStore.menuList.length == 0) {
 		await useInitUser()
