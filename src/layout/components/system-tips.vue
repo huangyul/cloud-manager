@@ -43,6 +43,6 @@
 
 <script setup>
 import { ref } from 'vue'
-const dialogVisible = ref(true)
+const dialogVisible = ref(false)
 const noTips = ref(true)
 </script>
