@@ -1,3 +1,4 @@
+// 外部直接链接的页面
 import CodeMeterList from '/@/views/code-meter/list/CodeMeterList.vue'
 
 export default [
@@ -8,5 +9,10 @@ export default [
 		meta: {
 			notAuth: true,
 		},
+	},
+	{
+		path: '/home',
+		name: 'home',
+		component: () => import('/@/views/dashboard/Dashboard.vue'),
 	},
 ]

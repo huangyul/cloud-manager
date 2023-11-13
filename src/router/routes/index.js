@@ -28,6 +28,11 @@ const loginRoute = {
 	component: () => import('/@/views/login/index.vue'),
 }
 
-basicRoute.children = routeList.flat(2)
+// basicRoute.children = routeList.flat(2)
 
-export const routes = [basicRoute, loginRoute, ...externalRoutes]
+export const routes = [
+	basicRoute,
+	...routeList.flat(2),
+	loginRoute,
+	...externalRoutes,
+]

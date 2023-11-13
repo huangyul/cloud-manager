@@ -1,10 +1,11 @@
 <template>
 	<div class="page">
-		<div class="top-bar">
+		<div class="top-bar justify-end!">
 			<div>
 				当前营业时间
 				<span class="date">{{ currentDate }}</span>
 			</div>
+			<span m-x-2>|</span>
 			<div class="time-reflesh">
 				<p class="time">刷新时间：{{ refreshTime }}</p>
 				<el-button type="primary" @click="refreshHandle">刷新</el-button>
@@ -19,14 +20,17 @@
 		<!-- 饼图 -->
 		<div class="row">
 			<CakeSale class="section-card" ref="cakesale" />
-			<RankedCard class="section-card" ref="rankedcard" />
+			<CakeSale class="section-card" ref="cakesale" />
 		</div>
 
 		<!-- 客单价 -->
-		<CategoryCard ref="categorycard" />
+		<div class="row">
+			<CategoryCard ref="categorycard" />
+			<RankedCard class="section-card" ref="rankedcard" />
+		</div>
 
 		<!-- 趋势 -->
-		<!-- <TrendCard /> -->
+		<TrendCard />
 	</div>
 </template>
 
@@ -35,7 +39,7 @@ import Summation from './components/summation.vue'
 import CakeSale from './components/cake-sale.vue'
 import CategoryCard from './components/category-card.vue'
 import RankedCard from './components/ranked-card.vue'
-//import TrendCard from './components/trend-card.vue'
+import TrendCard from './components/trend-card.vue'
 import Discovery from './components/discovery.vue'
 import { nextTick, ref } from 'vue'
 import moment from 'moment'
